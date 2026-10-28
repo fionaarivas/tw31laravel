@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class PageController extends Controller
+{
+    public function about() {
+
+    $data = [
+        'course' => 'Web Systems Technologies!',
+        'module' => 'Laravel Foundations.',
+    ];
+
+    return view('about', $data);
+
+    }
+
+    public function task($id) {
+
+    $data = [
+
+    'id'=> $id,
+    'title' => 'IT0049 -  Section TW31',
+
+    ];
+
+    return view('task', $data);
+    
+    }
+}
