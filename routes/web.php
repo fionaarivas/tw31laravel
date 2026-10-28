@@ -25,7 +25,8 @@ Route::resource('members', MemberController::class);
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
-Route::patch('/members/{member}/activate', [
-    MemberController::class,
-    'activate',
-])->name('members.activate');
+Route::patch('/members/{member}/deactivate', [MemberController::class, 'deactivate'])
+    ->name('members.deactivate');
+
+Route::patch('/members/{member}/activate', [MemberController::class, 'activate'])
+    ->name('members.activate');

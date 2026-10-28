@@ -124,18 +124,26 @@ class MemberController extends Controller
     }
 
     public function destroy(Member $member)
-    {
-        // Deactivate instead of permanently deleting the record.
-        $member->update([
-            'status' => 'inactive',
-        ]);
+   {
+    $member->delete();
 
-        return redirect()
-            ->route('members.index')
-            ->with('success', 'Member deactivated successfully.');
+    return redirect()
+        ->route('members.index')
+        ->with('success', 'Member deleted permanently.');
     }
 
-    public function activate(Member $member)
+    public function deactivate(Member $member)
+{
+    $member->update([
+        'status' => 'inactive',
+    ]);
+
+    return redirect()
+        ->route('members.index')
+        ->with('success', 'Member deactivated successfully.');
+}
+
+public function activate(Member $member)
 {
     $member->update([
         'status' => 'active',
@@ -144,5 +152,6 @@ class MemberController extends Controller
     return redirect()
         ->route('members.index')
         ->with('success', 'Member activated successfully.');
-    }
+}
+
 }
