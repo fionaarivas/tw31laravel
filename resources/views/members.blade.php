@@ -341,26 +341,34 @@
             <a href="{{ route('members.index') }}" class="active">
                  Members
             </a>
+
+             <a href="{{ route('membership-categories.index') }}">
+                Membership Categories
+            </a>
         </nav>
 
         <div class="menu-title">Management</div>
 
         <nav class="menu">
-            <a href="#" class="disabled">
-                 Categories
-            </a>
 
-            <a href="#" class="disabled">
-                 Membership Levels
-            </a>
+                <a
+                    href="{{ route('membership-levels.index') }}"
+                >
+                    Membership Levels
+                </a>
 
-            <a href="#" class="disabled">
-                 Transactions
-            </a>
+                <a
+                    href="{{ route('transactions.index') }}"
+                >
+                    Transactions
+                </a>
 
-            <a href="#" class="disabled">
-                 Payments
-            </a>
+                <a
+                    href="{{ route('payments.index') }}"
+                >
+                    Payments
+                </a>
+
         </nav>
     </aside>
 

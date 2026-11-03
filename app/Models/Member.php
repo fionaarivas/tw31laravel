@@ -22,11 +22,22 @@ class Member extends Model
 
     public function membershipCategory()
     {
-        return $this->belongsTo(MembershipCategory::class);
+        return $this->belongsTo(
+            MembershipCategory::class
+        );
     }
 
     public function membershipLevel()
     {
-        return $this->belongsTo(MembershipLevel::class);
+        return $this->belongsTo(
+            MembershipLevel::class
+        );
+    }
+
+    public function membershipTransactions()
+    {
+        return $this->hasMany(
+            MembershipTransaction::class
+        );
     }
 }

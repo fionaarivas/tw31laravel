@@ -154,4 +154,19 @@ public function activate(Member $member)
         ->with('success', 'Member activated successfully.');
 }
 
+public function transactionHistory(Member $member)
+{
+    $member->load([
+        'membershipCategory',
+        'membershipLevel',
+        'membershipTransactions.membershipLevel',
+        'membershipTransactions.payments',
+    ]);
+
+    return view(
+        'members.transactions',
+        compact('member')
+    );
+}
+
 }

@@ -12,42 +12,45 @@
         }
 
         body {
-              font-family:
-             -apple-system,
-             BlinkMacSystemFont,
-             "SF Pro Display",
-             "SF Pro Text",
-             "Segoe UI",
-             Helvetica,
-             Arial,
-             sans-serif;
-
+            margin: 0;
+            background: #f8faf9;
+            color: #26332f;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                Helvetica,
+                Arial,
+                sans-serif;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         .content {
             width: 100%;
             max-width: 1050px;
             margin: 0 auto;
-            padding: 45px 35px;
+            padding: 45px 35px 70px;
         }
 
         .top-section {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 28px;
         }
 
         h1 {
             margin: 0;
-            font-size: 30px;
+            font-size: 32px;
+            letter-spacing: -0.8px;
         }
 
         .subtitle {
             color: #71807a;
-            margin-top: 8px;
+            margin-top: 9px;
+            font-size: 15px;
         }
 
         .back-button {
@@ -75,7 +78,7 @@
         .card-title {
             color: #337a4b;
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 22px;
         }
 
@@ -100,7 +103,7 @@
 
         .detail-value {
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             color: #26332f;
         }
 
@@ -113,7 +116,7 @@
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 700;
             text-transform: capitalize;
         }
 
@@ -137,7 +140,7 @@
         .membership-name {
             font-size: 22px;
             color: #337a4b;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 16px;
         }
 
@@ -176,7 +179,7 @@
 
         .benefits-title {
             color: #b83e64;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 8px;
         }
 
@@ -188,6 +191,7 @@
 
         .button-row {
             display: flex;
+            justify-content: flex-end;
             gap: 12px;
             margin-top: 25px;
         }
@@ -198,16 +202,27 @@
             border-radius: 9px;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
         }
 
         .edit-button {
-            background: #e875a8;
-            color: white;
+            background: #fff0d8;
+            color: #a8631b;
         }
 
         .edit-button:hover {
-            background: #d95f94;
+            background: #ffe5bd;
+        }
+
+        .history-button {
+            background: #e7f5ef;
+            color: #287b66;
+        }
+
+        .history-button:hover {
+            background: #d2eee2;
         }
 
         .back-bottom-button {
@@ -248,6 +263,7 @@
             }
 
             .button {
+                width: 100%;
                 text-align: center;
             }
         }
@@ -256,160 +272,171 @@
 
 <body>
 
-    <main class="content">
+<main class="content">
 
-        <div class="top-section">
-            <div>
-                <h1>Member Profile</h1>
+    <div class="top-section">
+        <div>
+            <h1>Member Profile</h1>
 
-                <p class="subtitle">
-                    View complete membership information.
-                </p>
-            </div>
-
-            <a
-                href="{{ route('members.index') }}"
-                class="back-button"
-            >
-                ← Back to Members
-            </a>
+            <p class="subtitle">
+                View complete membership information.
+            </p>
         </div>
 
-        <section class="profile-card">
+        <a
+            href="{{ route('members.index') }}"
+            class="back-button"
+        >
+            ← Back to Members
+        </a>
+    </div>
 
-            <div class="card-title">
-                Personal Information
+    <section class="profile-card">
+
+        <div class="card-title">
+            Personal Information
+        </div>
+
+        <div class="details-grid">
+
+            <div class="detail-box">
+                <div class="detail-label">
+                    Membership Number
+                </div>
+
+                <div class="detail-value">
+                    {{ $member->membership_number }}
+                </div>
             </div>
 
-            <div class="details-grid">
-
-                <div class="detail-box">
-                    <div class="detail-label">
-                        Membership Number
-                    </div>
-
-                    <div class="detail-value">
-                        {{ $member->membership_number }}
-                    </div>
+            <div class="detail-box">
+                <div class="detail-label">
+                    Status
                 </div>
 
-                <div class="detail-box">
-                    <div class="detail-label">
-                        Status
-                    </div>
-
-                    <span class="status {{ $member->status }}">
-                        {{ $member->status }}
-                    </span>
-                </div>
-
-                <div class="detail-box">
-                    <div class="detail-label">
-                        Full Name
-                    </div>
-
-                    <div class="detail-value">
-                        {{ $member->name }}
-                    </div>
-                </div>
-
-                <div class="detail-box">
-                    <div class="detail-label">
-                        Email Address
-                    </div>
-
-                    <div class="detail-value">
-                        {{ $member->email }}
-                    </div>
-                </div>
-
-                <div class="detail-box">
-                    <div class="detail-label">
-                        Phone Number
-                    </div>
-
-                    <div class="detail-value">
-                        {{ $member->phone_number }}
-                    </div>
-                </div>
-
-                <div class="detail-box full-width">
-                    <div class="detail-label">
-                        Address
-                    </div>
-
-                    <div class="detail-value">
-                        {{ $member->address }}
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="profile-card">
-
-            <div class="card-title">
-                Membership Information
+                <span class="status {{ $member->status }}">
+                    {{ $member->status }}
+                </span>
             </div>
 
-            <div class="membership-card">
-
-                <div class="membership-name">
-                    {{ $member->membershipLevel->name ?? 'No Level Assigned' }}
+            <div class="detail-box">
+                <div class="detail-label">
+                    Full Name
                 </div>
 
-                <div class="membership-details">
+                <div class="detail-value">
+                    {{ $member->name }}
+                </div>
+            </div>
 
-                    <div class="membership-item">
-                        <span>Category</span>
-
-                        <strong>
-                            {{ $member->membershipCategory->name ?? 'No Category Assigned' }}
-                        </strong>
-                    </div>
-
-                    <div class="membership-item">
-                        <span>Category Description</span>
-
-                        <strong>
-                            {{ $member->membershipCategory->description ?? 'No description available.' }}
-                        </strong>
-                    </div>
-
-                    <div class="membership-item">
-                        <span>Membership Fee</span>
-
-                        <strong>
-                            ₱{{ number_format($member->membershipLevel->fee ?? 0, 2) }}
-                        </strong>
-                    </div>
-
-                    <div class="membership-item">
-                        <span>Validity Period</span>
-
-                        <strong>
-                            {{ $member->membershipLevel->validity_period_months ?? 0 }}
-                            month(s)
-                        </strong>
-                    </div>
-
+            <div class="detail-box">
+                <div class="detail-label">
+                    Email Address
                 </div>
 
-                <div class="benefits">
-                    <div class="benefits-title">
-                        Membership Benefits
-                    </div>
+                <div class="detail-value">
+                    {{ $member->email }}
+                </div>
+            </div>
 
-                    <div class="benefits-text">
-                        {{ $member->membershipLevel->benefits ?? 'No benefits listed.' }}
-                    </div>
+            <div class="detail-box">
+                <div class="detail-label">
+                    Phone Number
+                </div>
+
+                <div class="detail-value">
+                    {{ $member->phone_number }}
+                </div>
+            </div>
+
+            <div class="detail-box full-width">
+                <div class="detail-label">
+                    Address
+                </div>
+
+                <div class="detail-value">
+                    {{ $member->address }}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="profile-card">
+
+        <div class="card-title">
+            Membership Information
+        </div>
+
+        <div class="membership-card">
+
+            <div class="membership-name">
+                {{ $member->membershipLevel->name ?? 'No Level Assigned' }}
+            </div>
+
+            <div class="membership-details">
+
+                <div class="membership-item">
+                    <span>Category</span>
+
+                    <strong>
+                        {{ $member->membershipCategory->name ?? 'No Category Assigned' }}
+                    </strong>
+                </div>
+
+                <div class="membership-item">
+                    <span>Category Description</span>
+
+                    <strong>
+                        {{ $member->membershipCategory->description ?? 'No description available.' }}
+                    </strong>
+                </div>
+
+                <div class="membership-item">
+                    <span>Membership Fee</span>
+
+                    <strong>
+                        ₱{{ number_format($member->membershipLevel->fee ?? 0, 2) }}
+                    </strong>
+                </div>
+
+                <div class="membership-item">
+                    <span>Validity Period</span>
+
+                    <strong>
+                        {{ $member->membershipLevel->validity_period_months ?? 0 }}
+                        month(s)
+                    </strong>
                 </div>
 
             </div>
-        </section>
 
+            <div class="benefits">
+                <div class="benefits-title">
+                    Membership Benefits
+                </div>
 
-    </main>
+                <div class="benefits-text">
+                    {{ $member->membershipLevel->benefits ?? 'No benefits listed.' }}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="button-row">
+
+            <a
+                href="{{ route('members.transactions', $member) }}"
+                class="button history-button"
+            >
+                Transaction History
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
 
 </body>
 </html>
