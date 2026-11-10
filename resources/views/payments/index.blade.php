@@ -335,52 +335,7 @@
 
     <div class="layout">
 
-        <aside class="sidebar">
-
-            <div class="brand">
-                Member<span>ship</span>
-            </div>
-
-            <div class="menu-title">
-                Main Menu
-            </div>
-
-            <nav class="menu">
-                <a href="{{ route('dashboard') }}">
-                    Dashboard
-                </a>
-
-                <a href="{{ route('members.index') }}">
-                    Members
-                </a>
-
-                <a href="{{ route('membership-categories.index') }}">
-                    Membership Categories
-                </a>
-            </nav>
-
-            <div class="menu-title">
-                Management
-            </div>
-
-            <nav class="menu">
-                <a href="{{ route('membership-levels.index') }}">
-                    Membership Levels
-                </a>
-
-                <a href="{{ route('transactions.index') }}">
-                    Transactions
-                </a>
-
-                <a
-                    href="{{ route('payments.index') }}"
-                    class="active"
-                >
-                    Payments
-                </a>
-            </nav>
-
-        </aside>
+       @include('partials.sidebar')
 
         <main class="main">
 

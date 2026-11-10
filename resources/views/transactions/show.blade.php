@@ -246,15 +246,6 @@
             cursor: pointer;
         }
 
-        .edit-button {
-            background: #fff0d8;
-            color: #a8631b;
-        }
-
-        .edit-button:hover {
-            background: #ffe5bd;
-        }
-
         .approve-button {
             background: #e2f4e4;
             color: #337a4b;
@@ -262,6 +253,15 @@
 
         .approve-button:hover {
             background: #ccebd2;
+        }
+
+        .receipt-button {
+            background: #dceef3;
+            color: #216075;
+        }
+
+        .receipt-button:hover {
+            background: #c8e5ed;
         }
 
         .back-bottom-button {
@@ -305,13 +305,10 @@
                 flex-direction: column;
             }
 
-            .button {
-                width: 100%;
-                text-align: center;
-            }
-
+            .button,
             .button-row form {
                 width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -363,7 +360,9 @@
         <div class="details-grid">
 
             <div class="detail-box">
-                <div class="detail-label">Member</div>
+                <div class="detail-label">
+                    Member
+                </div>
 
                 <div class="detail-value">
                     {{ $transaction->member?->name ?? 'N/A' }}
@@ -371,7 +370,9 @@
             </div>
 
             <div class="detail-box">
-                <div class="detail-label">Membership Number</div>
+                <div class="detail-label">
+                    Membership Number
+                </div>
 
                 <div class="detail-value">
                     {{ $transaction->member?->membership_number ?? 'N/A' }}
@@ -379,7 +380,9 @@
             </div>
 
             <div class="detail-box">
-                <div class="detail-label">Transaction Type</div>
+                <div class="detail-label">
+                    Transaction Type
+                </div>
 
                 <div class="detail-value">
                     {{ ucfirst($transaction->transaction_type) }}
@@ -387,7 +390,9 @@
             </div>
 
             <div class="detail-box">
-                <div class="detail-label">Membership Level</div>
+                <div class="detail-label">
+                    Membership Level
+                </div>
 
                 <div class="detail-value">
                     {{ $transaction->membershipLevel?->name ?? 'N/A' }}
@@ -395,7 +400,9 @@
             </div>
 
             <div class="detail-box">
-                <div class="detail-label">Amount</div>
+                <div class="detail-label">
+                    Amount
+                </div>
 
                 <div class="amount">
                     ₱{{ number_format($transaction->amount, 2) }}
@@ -403,7 +410,9 @@
             </div>
 
             <div class="detail-box">
-                <div class="detail-label">Status</div>
+                <div class="detail-label">
+                    Status
+                </div>
 
                 <span class="status {{ $transaction->status }}">
                     {{ ucfirst($transaction->status) }}
@@ -411,7 +420,9 @@
             </div>
 
             <div class="detail-box">
-                <div class="detail-label">Transaction Date</div>
+                <div class="detail-label">
+                    Transaction Date
+                </div>
 
                 <div class="detail-value">
                     {{ $transaction->transaction_date?->format('F d, Y') }}
@@ -419,7 +430,9 @@
             </div>
 
             <div class="detail-box">
-                <div class="detail-label">Membership Start Date</div>
+                <div class="detail-label">
+                    Membership Start Date
+                </div>
 
                 <div class="detail-value">
                     {{ $transaction->membership_start_date?->format('F d, Y') ?? 'Not set' }}
@@ -427,7 +440,9 @@
             </div>
 
             <div class="detail-box full-width">
-                <div class="detail-label">Membership End Date</div>
+                <div class="detail-label">
+                    Membership End Date
+                </div>
 
                 <div class="detail-value">
                     {{ $transaction->membership_end_date?->format('F d, Y') ?? 'Not set' }}
@@ -462,11 +477,18 @@
 
                     <tbody>
                         <tr>
-                            <td>{{ $payment->payment_reference }}</td>
-                            <td>₱{{ number_format($payment->amount, 2) }}</td>
+                            <td>
+                                {{ $payment->payment_reference }}
+                            </td>
+
+                            <td>
+                                ₱{{ number_format($payment->amount, 2) }}
+                            </td>
+
                             <td>
                                 {{ ucwords(str_replace('_', ' ', $payment->payment_method)) }}
                             </td>
+
                             <td>
                                 {{ $payment->payment_date?->format('F d, Y') }}
                             </td>
@@ -489,13 +511,6 @@
                 Back
             </a>
 
-            <a
-                href="{{ route('transactions.edit', $transaction) }}"
-                class="button edit-button"
-            >
-                Edit Transaction
-            </a>
-
             @if ($transaction->status === 'paid')
                 <form
                     action="{{ route('transactions.approve', $transaction) }}"
@@ -512,6 +527,16 @@
                         Approve Transaction
                     </button>
                 </form>
+            @endif
+
+            @if (in_array($transaction->status, ['paid', 'approved']))
+                <a
+                    href="{{ route('transactions.receipt', $transaction) }}"
+                    class="button receipt-button"
+                    target="_blank"
+                >
+                    Print Receipt
+                </a>
             @endif
 
         </div>

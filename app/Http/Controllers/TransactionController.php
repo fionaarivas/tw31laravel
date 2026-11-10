@@ -7,6 +7,7 @@ use App\Models\MembershipLevel;
 use App\Models\MembershipTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 
 class TransactionController extends Controller
@@ -123,9 +124,8 @@ class TransactionController extends Controller
             );
     }
 
-    public function show(
-        MembershipTransaction $transaction
-    ) {
+    public function show (MembershipTransaction $transaction) 
+    {
         $transaction->load([
             'member',
             'membershipLevel',
@@ -208,17 +208,26 @@ class TransactionController extends Controller
     }
 
     public function destroy(
-        MembershipTransaction $transaction
-    ) {
-        $transaction->delete();
-
+    MembershipTransaction $transaction
+) {
+    if ($transaction->payments()->exists()) {
         return redirect()
-            ->route('transactions.index')
+            ->back()
             ->with(
-                'success',
-                'Membership transaction deleted successfully.'
+                'error',
+                'This transaction cannot be deleted because it has a recorded payment.'
             );
     }
+
+    $transaction->delete();
+
+    return redirect()
+        ->route('transactions.index')
+        ->with(
+            'success',
+            'Membership transaction deleted successfully.'
+        );
+}
 
     private function generateTransactionNumber()
     {
@@ -243,15 +252,67 @@ class TransactionController extends Controller
     if ($transaction->status !== 'paid') {
         return redirect()
             ->back()
-            ->with('error', 'Only paid transactions can be approved.');
+            ->with(
+                'error',
+                'Only paid transactions can be approved.'
+            );
     }
+
+    $transaction->load('membershipLevel');
+
+    $startDate = Carbon::today();
+
+    if ($transaction->transaction_type === 'renewal') {
+        $previousTransaction = MembershipTransaction::where(
+            'member_id',
+            $transaction->member_id
+        )
+            ->where('status', 'approved')
+            ->whereNotNull('membership_end_date')
+            ->latest('membership_end_date')
+            ->first();
+
+        if (
+            $previousTransaction &&
+            Carbon::parse(
+                $previousTransaction->membership_end_date
+            )->isFuture()
+        ) {
+            $startDate = Carbon::parse(
+                $previousTransaction->membership_end_date
+            )->addDay();
+        }
+    }
+
+    $endDate = $startDate->copy()->addMonths(
+        $transaction->membershipLevel->validity_period_months
+    );
 
     $transaction->update([
         'status' => 'approved',
+        'membership_start_date' => $startDate,
+        'membership_end_date' => $endDate,
     ]);
 
     return redirect()
         ->route('transactions.show', $transaction)
-        ->with('success', 'Transaction approved successfully.');
+        ->with(
+            'success',
+            'Transaction approved and membership dates generated successfully.'
+        );
+}
+
+public function receipt(MembershipTransaction $transaction)
+{
+    $transaction->load([
+        'member.membershipCategory',
+        'membershipLevel',
+        'payments',
+    ]);
+
+    return view(
+        'transactions.receipt',
+        compact('transaction')
+    );
 }
 }

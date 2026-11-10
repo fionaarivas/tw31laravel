@@ -3,29 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\MembershipTransaction;
+use App\Models\Payment;
 
 class DashboardController extends Controller
 {
     public function index()
-{
-    $totalMembers = Member::count();
+    {
+        $totalMembers = Member::count();
 
-    $activeMembers = Member::where('status', 'active')->count();
+        $activeMembers = Member::where(
+            'status',
+            'active'
+        )->count();
 
-    $pendingTransactions = 0;
-    $collectedPayments = 0;
+        $pendingTransactions = MembershipTransaction::where(
+            'status',
+            'pending'
+        )->count();
 
-    $recentMembers = Member::with([
-        'membershipCategory',
-        'membershipLevel',
-    ])->latest()->take(5)->get();
+        $collectedPayments = Payment::sum('amount');
 
-    return view('dashboard', compact(
-        'totalMembers',
-        'activeMembers',
-        'pendingTransactions',
-        'collectedPayments',
-        'recentMembers'
-    ));
-}
+        $recentMembers = Member::with([
+            'membershipCategory',
+            'membershipLevel',
+        ])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('dashboard', compact(
+            'totalMembers',
+            'activeMembers',
+            'pendingTransactions',
+            'collectedPayments',
+            'recentMembers'
+        ));
+    }
 }

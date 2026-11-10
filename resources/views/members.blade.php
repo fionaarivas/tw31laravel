@@ -24,18 +24,19 @@
         }
 
         body {
-              font-family:
-             -apple-system,
-             BlinkMacSystemFont,
-             "SF Pro Display",
-             "SF Pro Text",
-             "Segoe UI",
-             Helvetica,
-             Arial,
-             sans-serif;
-
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                Helvetica,
+                Arial,
+                sans-serif;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         h1,
@@ -46,16 +47,8 @@
         input,
         select,
         textarea {
-               font-family:
-                 -apple-system,
-                 BlinkMacSystemFont,
-                 "SF Pro Display",
-                 "SF Pro Text",
-                 "Segoe UI",
-                 Helvetica,
-                 Arial,
-                 sans-serif;
-    }
+            font-family: inherit;
+        }
 
         .layout {
             display: flex;
@@ -64,8 +57,9 @@
 
         .sidebar {
             width: 245px;
-            background: var(--sidebar);
+            min-height: 100vh;
             padding: 25px 18px;
+            background: var(--sidebar);
             position: fixed;
             top: 0;
             bottom: 0;
@@ -109,11 +103,6 @@
             font-weight: bold;
         }
 
-        .menu a.disabled {
-            color: #78958b;
-            cursor: not-allowed;
-        }
-
         .main {
             width: calc(100% - 245px);
             margin-left: 245px;
@@ -155,7 +144,8 @@
             padding: 12px 17px;
         }
 
-        .add-button:hover {
+        .add-button:hover,
+        .primary:hover {
             background: var(--pink-hover);
         }
 
@@ -176,10 +166,6 @@
         .primary {
             background: var(--pink);
             color: white;
-        }
-
-        .primary:hover {
-            background: var(--pink-hover);
         }
 
         .secondary {
@@ -322,62 +308,24 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="layout">
 
-    <aside class="sidebar">
-        <div class="brand">
-            Member<span>ship</span>
-        </div>
+ @include('partials.sidebar')
 
-        <div class="menu-title">Main Menu</div>
-
-        <nav class="menu">
-            <a href="{{ route('dashboard') }}">
-                 Dashboard
-            </a>
-
-            <a href="{{ route('members.index') }}" class="active">
-                 Members
-            </a>
-
-             <a href="{{ route('membership-categories.index') }}">
-                Membership Categories
-            </a>
-        </nav>
-
-        <div class="menu-title">Management</div>
-
-        <nav class="menu">
-
-                <a
-                    href="{{ route('membership-levels.index') }}"
-                >
-                    Membership Levels
-                </a>
-
-                <a
-                    href="{{ route('transactions.index') }}"
-                >
-                    Transactions
-                </a>
-
-                <a
-                    href="{{ route('payments.index') }}"
-                >
-                    Payments
-                </a>
-
-        </nav>
-    </aside>
-
+    
     <main class="main">
 
         <div class="page-header">
+
             <div>
                 <h1>Members</h1>
-                <p>Manage registered members and membership information.</p>
+
+                <p>
+                    Manage registered members and membership information.
+                </p>
             </div>
 
             <a
@@ -386,6 +334,7 @@
             >
                 + Add New Member
             </a>
+
         </div>
 
         @if (session('success'))
@@ -406,7 +355,10 @@
                 value="{{ $search ?? '' }}"
             >
 
-            <button type="submit" class="button primary">
+            <button
+                type="submit"
+                class="button primary"
+            >
                 Search
             </button>
 
@@ -419,6 +371,7 @@
         </form>
 
         <div class="card">
+
             @forelse ($members as $member)
 
                 @if ($loop->first)
@@ -551,6 +504,7 @@
                 </div>
 
             @endforelse
+
         </div>
 
     </main>

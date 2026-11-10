@@ -4,173 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard | Membership System</title>
+    <title>Dashboard</title>
 
     <style>
-        :root {
-            --background: #f8faf9;
-            --sidebar: #193b35;
-            --sidebar-hover: #28584e;
-            --white: #ffffff;
-            --pink: #e875a8;
-            --pink-hover: #d95f94;
-            --green: #86c98b;
-            --green-dark: #337a4b;
-            --text: #26332f;
-            --muted: #71807a;
-            --border: #e4ebe7;
-        }
-
         * {
             box-sizing: border-box;
         }
 
         body {
-              font-family:
-             -apple-system,
-             BlinkMacSystemFont,
-             "SF Pro Display",
-             "SF Pro Text",
-             "Segoe UI",
-             Helvetica,
-             Arial,
-             sans-serif;
-
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            background: #f7faf9;
+            color: #193b35;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                Helvetica,
+                Arial,
+                sans-serif;
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        button,
-        input,
-        select,
-        textarea {
-               font-family:
-                 -apple-system,
-                 BlinkMacSystemFont,
-                 "SF Pro Display",
-                 "SF Pro Text",
-                 "Segoe UI",
-                 Helvetica,
-                 Arial,
-                 sans-serif;
-    }
-
         .layout {
-            display: flex;
             min-height: 100vh;
+            display: flex;
         }
 
         .sidebar {
             width: 245px;
-            background: var(--sidebar);
-            padding: 25px 18px;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
+            min-height: 100vh;
+            padding: 28px 17px;
+            background: #193b35;
+            color: white;
         }
 
         .brand {
-            color: white;
-            font-size: 21px;
-            font-weight: bold;
-            padding: 10px 12px 28px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 13px 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, .16);
+            font-size: 23px;
+            font-weight: 700;
         }
 
         .brand span {
-            color: #f6a8c7;
+            color: #e875a8;
         }
 
         .menu-title {
-            margin: 30px 12px 10px;
-            color: #b9d4c9;
+            margin: 34px 12px 14px;
+            color: #b5d0c7;
             font-size: 11px;
-            text-transform: uppercase;
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .menu a {
+        .nav-link {
             display: block;
-            color: #d8e8df;
-            text-decoration: none;
+            margin-bottom: 5px;
             padding: 13px 14px;
-            margin: 6px 0;
-            border-radius: 8px;
+            border-radius: 9px;
+            color: white;
+            text-decoration: none;
             font-size: 14px;
         }
 
-        .menu a:hover,
-        .menu a.active {
-            background: var(--pink);
+        .nav-link:hover,
+        .nav-link.active {
+            background: #e875a8;
             color: white;
-            font-weight: bold;
         }
 
-        .menu a.disabled {
-            color: #78958b;
-            cursor: not-allowed;
+        .logout-form {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, .16);
+        }
+
+        .logout-button {
+            width: 100%;
+            border: none;
+            border-radius: 9px;
+            padding: 13px 14px;
+            background: transparent;
+            color: white;
+            text-align: left;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background: #b83e64;
         }
 
         .main {
-            width: calc(100% - 245px);
+            flex: 1;
             margin-left: 245px;
-            padding: 35px 45px;
+            padding: 38px 52px 60px;
         }
 
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
+        .page-header {
+            margin-bottom: 36px;
         }
 
-        .topbar h1 {
+        h1 {
             margin: 0;
-            color: var(--text);
-            font-size: 34px;
+            font-size: 36px;
+            letter-spacing: -1px;
         }
 
-        .topbar p {
+        .subtitle {
             margin-top: 10px;
-            color: var(--muted);
+            color: #66807b;
+            font-size: 16px;
         }
 
-        .date {
-            color: var(--muted);
-            font-size: 14px;
-        }
-
-        .hero {
-            background: var(--white);
-            border: 1px solid var(--border);
-            padding: 32px;
-            border-radius: 18px;
+        .welcome-card {
             margin-bottom: 25px;
-            box-shadow: 0 5px 18px rgba(34, 70, 55, 0.06);
+            padding: 34px;
+            border: 1px solid #dce9df;
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 8px 24px rgba(25, 59, 53, .05);
         }
 
-        .hero h2 {
+        .welcome-card h2 {
             margin: 0;
-            font-size: 31px;
-            color: var(--text);
+            font-size: 29px;
         }
 
-        .hero h2 span {
-            color: var(--pink);
+        .welcome-card h2 span {
+            color: #e875a8;
         }
 
-        .hero p {
-            color: var(--muted);
-            line-height: 1.6;
-            max-width: 720px;
+        .welcome-card p {
+            max-width: 750px;
+            margin: 14px 0 0;
+            color: #66807b;
+            line-height: 1.7;
         }
 
-        .cards {
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 18px;
@@ -178,62 +152,63 @@
         }
 
         .stat-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            padding: 22px;
-            border-radius: 14px;
-            box-shadow: 0 5px 18px rgba(34, 70, 55, 0.06);
+            padding: 24px 22px;
+            border: 1px solid #dce9df;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 8px 20px rgba(25, 59, 53, .04);
         }
 
-        .stat-card h3 {
-            margin: 0;
-            color: var(--muted);
+        .stat-label {
+            color: #66807b;
             font-size: 13px;
+            font-weight: 600;
         }
 
-        .stat-number {
+        .stat-value {
             margin-top: 15px;
-            color: var(--pink);
-            font-size: 30px;
-            font-weight: bold;
+            color: #e875a8;
+            font-size: 29px;
+            font-weight: 700;
         }
 
-        .stat-card:nth-child(2) .stat-number {
-            color: var(--green-dark);
+        .stat-card:nth-child(2) .stat-value {
+            color: #337a4b;
         }
 
-        .stat-card:nth-child(3) .stat-number {
-            color: #8b6b35;
+        .stat-card:nth-child(3) .stat-value {
+            color: #a8631b;
         }
 
         .content-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 5px 18px rgba(34, 70, 55, 0.06);
+            padding: 28px;
+            border: 1px solid #dce9df;
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 8px 24px rgba(25, 59, 53, .05);
         }
 
-        .section-header {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
-        .section-header h2 {
+        .card-header h2 {
             margin: 0;
-            color: var(--text);
+            font-size: 22px;
         }
 
         .view-all {
-            color: var(--pink);
+            color: #e875a8;
+            font-size: 14px;
+            font-weight: 600;
             text-decoration: none;
-            font-weight: bold;
         }
 
         .view-all:hover {
-            color: var(--pink-hover);
+            color: #d95f94;
         }
 
         .table-wrapper {
@@ -243,236 +218,231 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 650px;
+        }
+
+        th,
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #e5ece8;
+            text-align: left;
         }
 
         th {
-            color: var(--muted);
-            text-align: left;
-            padding: 13px;
+            color: #71807a;
             font-size: 12px;
             text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
         }
 
         td {
-            padding: 14px 13px;
-            color: var(--text);
-            border-bottom: 1px solid var(--border);
+            color: #26332f;
             font-size: 14px;
-        }
-
-        tr:hover {
-            background: #fff7fa;
         }
 
         .status {
             display: inline-block;
-            padding: 6px 11px;
+            padding: 6px 12px;
             border-radius: 20px;
             background: #e2f4e4;
-            color: var(--green-dark);
+            color: #337a4b;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 700;
+            text-transform: capitalize;
         }
 
-        .empty {
-            color: var(--muted);
-            padding: 20px 0;
+        .status.inactive {
+            background: #fff0f4;
+            color: #b83e64;
         }
 
-        @media (max-width: 1050px) {
-            .cards {
+        .empty-message {
+            padding: 25px;
+            border-radius: 10px;
+            background: #f8fbf9;
+            color: #71807a;
+            text-align: center;
+        }
+
+        @media (max-width: 1000px) {
+            .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main {
+                padding: 30px;
             }
         }
 
         @media (max-width: 700px) {
+            .layout {
+                display: block;
+            }
+
             .sidebar {
-                width: 205px;
+                width: 100%;
+                min-height: auto;
             }
 
             .main {
-                width: calc(100% - 205px);
-                margin-left: 205px;
-                padding: 25px 18px;
+               margin-left: 0;
+               padding: 25px 18px 45px;
             }
-
-            .topbar {
-                display: block;
-            }
-
-            .date {
-                display: block;
-                margin-top: 12px;
-            }
-
-            .cards {
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .hero h2 {
-                font-size: 26px;
+            .welcome-card,
+            .content-card {
+                padding: 22px;
+            }
+
+            .card-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
 </head>
+
 <body>
 
 <div class="layout">
 
-    <aside class="sidebar">
-        <div class="brand">
-            Member<span>ship</span>
-        </div>
-
-        <div class="menu-title">Main Menu</div>
-
-        <nav class="menu">
-            <a href="{{ route('dashboard') }}" class="active">
-                 Dashboard
-            </a>
-
-            <a href="{{ route('members.index') }}">
-                 Members
-            </a>
-
-             <a href="{{ route('membership-categories.index') }}">
-                 Membership Categories
-            </a>
-
-        </nav>
-
-        <div class="menu-title">Management</div>
-
-        <nav class="menu">
-            <a
-                    href="{{ route('membership-levels.index') }}"
-
-                >
-                    Membership Levels
-                </a>
-
-                <a
-                    href="{{ route('transactions.index') }}"
-                >
-                    Transactions
-                </a>
-
-                <a
-                    href="{{ route('payments.index') }}"
-                >
-                    Payments
-                </a>
-            
-        </nav>
-    </aside>
+    @include('partials.sidebar')
 
     <main class="main">
 
-        <div class="topbar">
-            <div>
-                <h1>Dashboard</h1>
-                <p>Membership Management and Transaction Processing System</p>
-            </div>
+        <header class="page-header">
+            <h1>Dashboard</h1>
 
-        </div>
+            <p class="subtitle">
+                Membership Management and Transaction Processing System
+            </p>
+        </header>
 
-        <section class="hero">
+        <section class="welcome-card">
+
             <h2>
-                Welcome to your <span>membership dashboard</span>
+                Welcome to
+                <span>membership dashboard</span>
             </h2>
 
             <p>
                 Manage member registration, membership levels, transactions,
                 and payment records in one organized system.
             </p>
+
         </section>
 
-        <section class="cards">
+        <section class="stats-grid">
+
             <div class="stat-card">
-                <h3>Total Members</h3>
-                <div class="stat-number">
+                <div class="stat-label">
+                    Total Members
+                </div>
+
+                <div class="stat-value">
                     {{ $totalMembers }}
                 </div>
             </div>
 
             <div class="stat-card">
-                <h3>Active Members</h3>
-                <div class="stat-number">
+                <div class="stat-label">
+                    Active Members
+                </div>
+
+                <div class="stat-value">
                     {{ $activeMembers }}
                 </div>
             </div>
 
             <div class="stat-card">
-                <h3>Pending Transactions</h3>
-                <div class="stat-number">
+                <div class="stat-label">
+                    Pending Transactions
+                </div>
+
+                <div class="stat-value">
                     {{ $pendingTransactions }}
                 </div>
             </div>
 
             <div class="stat-card">
-                <h3>Collected Payments</h3>
-                <div class="stat-number">
+                <div class="stat-label">
+                    Collected Payments
+                </div>
+
+                <div class="stat-value">
                     ₱{{ number_format($collectedPayments, 2) }}
                 </div>
             </div>
+
         </section>
 
         <section class="content-card">
-            <div class="section-header">
+
+            <div class="card-header">
                 <h2>Recent Members</h2>
 
-                <a href="{{ route('members.index') }}" class="view-all">
+                <a
+                    href="{{ route('members.index') }}"
+                    class="view-all"
+                >
                     View All
                 </a>
             </div>
 
-            <div class="table-wrapper">
-                @forelse ($recentMembers as $member)
+            @if ($recentMembers->count())
 
-                    @if ($loop->first)
-                        <table>
-                            <thead>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Membership No.</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Level</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($recentMembers as $member)
                                 <tr>
-                                    <th>Membership No.</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Level</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
+                                    <td>
+                                        {{ $member->membership_number }}
+                                    </td>
 
-                            <tbody>
-                    @endif
+                                    <td>
+                                        {{ $member->name }}
+                                    </td>
 
-                                <tr>
-                                    <td>{{ $member->membership_number }}</td>
-                                    <td>{{ $member->name }}</td>
                                     <td>
                                         {{ $member->membershipCategory?->name ?? 'N/A' }}
                                     </td>
+
                                     <td>
                                         {{ $member->membershipLevel?->name ?? 'N/A' }}
                                     </td>
+
                                     <td>
-                                        <span class="status">
-                                            {{ ucfirst($member->status) }}
+                                        <span class="status {{ $member->status }}">
+                                            {{ $member->status }}
                                         </span>
                                     </td>
                                 </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-                    @if ($loop->last)
-                            </tbody>
-                        </table>
-                    @endif
+            @else
 
-                @empty
-                    <div class="empty">
-                        No members found.
-                    </div>
-                @endforelse
-            </div>
+                <div class="empty-message">
+                    No members found.
+                </div>
+
+            @endif
+
         </section>
 
     </main>
