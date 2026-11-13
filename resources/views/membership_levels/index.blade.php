@@ -8,49 +8,45 @@
 
     <style>
         :root {
-            --background: #f8faf9;
-            --sidebar: #193b35;
-            --white: #ffffff;
-            --pink: #e875a8;
-            --pink-hover: #d95f94;
-            --green-dark: #337a4b;
-            --text: #26332f;
-            --muted: #71807a;
-            --border: #e4ebe7;
+            --background: #151219;
+            --panel: #1c1821;
+            --border: rgba(255, 255, 255, .14);
+            --text: #f8f4fa;
+            --muted: #b8afbd;
+            --pink: #e984c5;
+            --pink-dark: #c967a8;
+            --green: #72d69b;
+            --orange: #e5a45d;
+            --blue: #78c9dd;
         }
 
         * {
             box-sizing: border-box;
+            font-family: inherit;
         }
 
         body {
             margin: 0;
-            background: var(--background);
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 82% 0%,
+                    rgba(142, 81, 157, .22),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #151219 0%,
+                    #5c4e59 52%,
+                    #18131d 100%
+                );
             color: var(--text);
-
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
                 "Segoe UI",
-                Helvetica,
                 Arial,
                 sans-serif;
-
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        h1,
-        h2,
-        h3,
-        button,
-        input,
-        select,
-        textarea,
-        a {
-            font-family: inherit;
         }
 
         .layout {
@@ -58,343 +54,437 @@
             min-height: 100vh;
         }
 
-        .sidebar {
-            width: 245px;
-            background: var(--sidebar);
-            padding: 25px 18px;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-        }
-
-        .brand {
-            color: white;
-            font-size: 21px;
-            font-weight: 700;
-            padding: 10px 12px 28px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .brand span {
-            color: #f6a8c7;
-        }
-
-        .menu-title {
-            margin: 30px 12px 10px;
-            color: #b9d4c9;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .menu a {
-            display: block;
-            color: #d8e8df;
-            text-decoration: none;
-            padding: 13px 14px;
-            margin: 6px 0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: 0.2s ease;
-        }
-
-        .menu a:hover,
-        .menu a.active {
-            background: var(--pink);
-            color: white;
-            font-weight: 700;
-        }
-
-        .menu a.disabled {
-            color: #78958b;
-            cursor: not-allowed;
-        }
-
         .main {
-            width: calc(100% - 245px);
-            margin-left: 245px;
-            padding: 35px 45px;
+            flex: 1;
+            min-width: 0;
+            width: auto;
+            margin-left: 0;
+            padding: 30px 38px 55px;
         }
 
         .topbar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 28px;
+            justify-content: space-between;
+            gap: 25px;
+            margin-bottom: 27px;
         }
 
         .topbar h1 {
             margin: 0;
             color: var(--text);
-            font-size: 34px;
-            font-weight: 700;
-            letter-spacing: -0.8px;
+            font-size: 35px;
+            letter-spacing: -.8px;
         }
 
         .topbar p {
-            margin-top: 10px;
+            margin: 9px 0 0;
             color: var(--muted);
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .add-button {
-            background: var(--pink);
-            color: white;
-            padding: 12px 18px;
-            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 45px;
+            padding: 0 19px;
+            border-radius: 10px;
+            background: linear-gradient(
+                135deg,
+                var(--pink),
+                #bd71b5
+            );
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: 0.2s ease;
+            white-space: nowrap;
+            box-shadow: 0 9px 20px rgba(233, 132, 197, .2);
+            transition: .2s ease;
         }
 
         .add-button:hover {
-            background: var(--pink-hover);
+            background: var(--pink-dark);
+            transform: translateY(-2px);
         }
 
         .content-card {
-            background: var(--white);
+            width: 100%;
+            padding: 25px 27px;
             border: 1px solid var(--border);
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 5px 18px rgba(34, 70, 55, 0.06);
+            border-radius: 20px;
+            background: rgba(24, 21, 28, .95);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, .22);
         }
 
         .search-form {
             display: flex;
+            align-items: center;
             gap: 10px;
             margin-bottom: 22px;
         }
 
         .search-input {
             flex: 1;
-            border: 1px solid #d7e3dd;
+            min-width: 0;
+            min-height: 42px;
+            padding: 0 14px;
+            border: 1px solid rgba(255, 255, 255, .15);
             border-radius: 9px;
-            padding: 12px;
-            background: #fbfdfc;
+            outline: none;
+            background: #25202b;
             color: var(--text);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .search-input:focus {
-            outline: none;
-            border-color: #86c98b;
-            box-shadow: 0 0 0 3px rgba(134, 201, 139, 0.2);
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(233, 132, 197, .13);
+        }
+
+        .search-input::placeholder {
+            color: #8e8795;
         }
 
         .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 16px;
             border: none;
             border-radius: 9px;
-            padding: 11px 16px;
             font-size: 13px;
+            font-weight: 700;
             text-decoration: none;
             cursor: pointer;
-            transition: 0.2s ease;
+            transition: .2s ease;
         }
 
         .search-button {
-            background: var(--green-dark);
-            color: white;
+            background: var(--pink);
+            color: #ffffff;
         }
 
         .search-button:hover {
-            background: #28633b;
+            background: var(--pink-dark);
+            transform: translateY(-1px);
         }
 
         .clear-button {
-            background: #eef3f0;
-            color: #52635b;
+            background: #302a36;
+            color: #d7ceda;
         }
 
         .clear-button:hover {
-            background: #dfe9e4;
+            background: #3b3342;
         }
 
         .success-message,
         .error-message {
-            padding: 13px;
-            border-radius: 9px;
             margin-bottom: 20px;
-            font-size: 14px;
+            padding: 13px 16px;
+            border-radius: 10px;
+            font-size: 13px;
         }
 
         .success-message {
-            background: #e4f5e7;
-            color: var(--green-dark);
+            border: 1px solid rgba(114, 214, 155, .3);
+            background: rgba(114, 214, 155, .1);
+            color: var(--green);
         }
 
         .error-message {
-            background: #fff0f4;
-            color: #b83e64;
+            border: 1px solid rgba(240, 141, 168, .3);
+            background: rgba(240, 141, 168, .1);
+            color: #f08da8;
         }
 
         .table-wrapper {
-            overflow-x: auto;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1050px;
+            table-layout: fixed;
         }
 
-        th {
-            color: var(--muted);
-            text-align: left;
-            padding: 13px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
-        }
-
+        th,
         td {
-            padding: 15px 13px;
-            color: var(--text);
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
+            padding: 16px 9px;
+            border-bottom: 1px solid rgba(255, 255, 255, .09);
+            text-align: left;
             vertical-align: middle;
         }
 
-        tr:hover {
-            background: #fff7fa;
+        th {
+            color: #948b99;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 15%;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 11%;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 12%;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 21%;
+        }
+
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 12%;
+        }
+
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 29%;
+        }
+
+        td {
+            color: #d9d1dc;
+            font-size: 13px;
+        }
+
+        tbody tr {
+            transition: .2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, .035);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
         }
 
         .level-name {
-            color: var(--green-dark);
-            font-weight: 600;
+            color: var(--pink);
+            font-weight: 750;
         }
 
         .fee {
-            color: var(--green-dark);
-            font-weight: 700;
+            color: var(--green);
+            font-weight: 750;
         }
 
         .benefits {
             color: var(--muted);
-            max-width: 250px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .status {
-            display: inline-block;
-            padding: 7px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status::before {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            content: "";
         }
 
         .status.active {
-            background: #e2f4e4;
-            color: var(--green-dark);
+            background: rgba(114, 214, 155, .13);
+            color: var(--green);
         }
 
         .status.inactive {
-            background: #fff0f4;
-            color: #b83e64;
+            background: rgba(240, 141, 168, .13);
+            color: #f08da8;
         }
 
         .actions {
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 5px;
+            width: 100%;
+            white-space: nowrap;
+        }
+
+        .actions form {
+            display: flex;
+            margin: 0;
         }
 
         .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            padding: 0 8px;
             border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
-            font-size: 13px;
-            font-weight: 600;
+            border-radius: 9px;
+            font-size: 11px;
+            font-weight: 700;
             text-decoration: none;
+            white-space: nowrap;
             cursor: pointer;
-            font-family: inherit;
-            transition: 0.2s ease;
+            transition: .2s ease;
         }
 
         .view-button {
-            background: #dceef3;
-            color: #216075;
+            width: 55px;
+            background: rgba(120, 201, 221, .13);
+            color: var(--blue);
         }
 
         .view-button:hover {
-            background: #c8e4eb;
+            background: rgba(120, 201, 221, .23);
         }
 
         .edit-button {
-            background: #fff0d8;
-            color: #a8631b;
+            width: 55px;
+            background: rgba(229, 164, 93, .13);
+            color: var(--orange);
         }
 
         .edit-button:hover {
-            background: #ffe5bc;
+            background: rgba(229, 164, 93, .23);
+        }
+
+        .deactivate-button,
+        .activate-button {
+            width: 88px;
         }
 
         .deactivate-button {
-            background: #fde4ee;
-            color: #b83e64;
+            background: rgba(240, 141, 168, .13);
+            color: #f08da8;
         }
 
         .deactivate-button:hover {
-            background: #f8cede;
+            background: rgba(240, 141, 168, .25);
         }
 
         .activate-button {
-            background: #e2f4e4;
-            color: var(--green-dark);
+            background: rgba(114, 214, 155, .13);
+            color: var(--green);
         }
 
         .activate-button:hover {
-            background: #d0ead4;
+            background: rgba(114, 214, 155, .25);
         }
 
         .delete-button {
-            background: #f8d8e1;
-            color: #a83258;
+            width: 60px;
+            background: rgba(213, 100, 143, .16);
+            color: #f18aaa;
         }
 
         .delete-button:hover {
-            background: #f1c3d0;
+            background: rgba(213, 100, 143, .28);
         }
 
         .empty-message {
-            text-align: center;
+            padding: 40px 25px;
+            border: 1px dashed rgba(255, 255, 255, .18);
+            border-radius: 13px;
+            background: rgba(255, 255, 255, .025);
             color: var(--muted);
-            padding: 35px;
+            text-align: center;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1200px) {
             .main {
-                padding: 30px 25px;
+                padding: 30px 25px 50px;
             }
 
+            th,
+            td {
+                padding: 14px 6px;
+            }
+
+            .action-button {
+                padding: 0 6px;
+                font-size: 10px;
+            }
+
+            .view-button,
+            .edit-button {
+                width: 50px;
+            }
+
+            .deactivate-button,
+            .activate-button {
+                width: 80px;
+            }
+
+            .delete-button {
+                width: 54px;
+            }
+        }
+
+        @media (max-width: 950px) {
             .topbar {
                 align-items: flex-start;
                 flex-direction: column;
-                gap: 18px;
+            }
+
+            .add-button {
+                width: 100%;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 900px;
             }
         }
 
         @media (max-width: 700px) {
-            .sidebar {
-                width: 205px;
+            .layout {
+                display: block;
             }
 
             .main {
-                width: calc(100% - 205px);
-                margin-left: 205px;
-                padding: 25px 18px;
+                padding: 25px 17px 40px;
+            }
+
+            .topbar h1 {
+                font-size: 31px;
             }
 
             .search-form {
+                align-items: stretch;
                 flex-direction: column;
             }
 
             .search-button,
             .clear-button {
                 width: 100%;
-                text-align: center;
+            }
+
+            .content-card {
+                padding: 18px 15px;
             }
         }
     </style>
@@ -402,218 +492,220 @@
 
 <body>
 
-    <div class="layout">
+<div class="layout">
 
-       @include('partials.sidebar')
+    @include('partials.sidebar')
 
-        <main class="main">
+    <main class="main">
 
-            <div class="topbar">
+        <div class="topbar">
 
-                <div>
-                    <h1>Membership Levels</h1>
+            <div>
+                <h1>Membership Levels</h1>
 
-                    <p>
-                        Manage membership packages, fees, and benefits.
-                    </p>
-                </div>
-
-                <a
-                    href="{{ route('membership-levels.create') }}"
-                    class="add-button"
-                >
-                    + Add Level
-                </a>
-
+                <p>
+                    Manage membership packages, fees, and benefits.
+                </p>
             </div>
 
-            <section class="content-card">
+            <a
+                href="{{ route('membership-levels.create') }}"
+                class="add-button"
+            >
+                + Add Level
+            </a>
+        </div>
 
-                @if (session('success'))
-                    <div class="success-message">
-                        {{ session('success') }}
-                    </div>
-                @endif
+        <section class="content-card">
 
-                @if (session('error'))
-                    <div class="error-message">
-                        {{ session('error') }}
-                    </div>
-                @endif
+            @if (session('success'))
+                <div class="success-message">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-                <form
-                    action="{{ route('membership-levels.index') }}"
-                    method="GET"
-                    class="search-form"
+            @if (session('error'))
+                <div class="error-message">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <form
+                action="{{ route('membership-levels.index') }}"
+                method="GET"
+                class="search-form"
+            >
+                <input
+                    type="text"
+                    name="search"
+                    class="search-input"
+                    value="{{ $search ?? '' }}"
+                    placeholder="Search level or benefits..."
                 >
-                    <input
-                        type="text"
-                        name="search"
-                        class="search-input"
-                        value="{{ $search ?? '' }}"
-                        placeholder="Search level or benefits..."
-                    >
 
-                    <button
-                        type="submit"
-                        class="button search-button"
-                    >
-                        Search
-                    </button>
+                <button
+                    type="submit"
+                    class="button search-button"
+                >
+                    Search
+                </button>
 
-                    <a
-                        href="{{ route('membership-levels.index') }}"
-                        class="button clear-button"
-                    >
-                        Clear
-                    </a>
-                </form>
+                <a
+                    href="{{ route('membership-levels.index') }}"
+                    class="button clear-button"
+                >
+                    Clear
+                </a>
+            </form>
 
-                <div class="table-wrapper">
+            <div class="table-wrapper">
 
-                    <table>
-                        <thead>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Level Name</th>
+                            <th>Fee</th>
+                            <th>Validity</th>
+                            <th>Benefits</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @forelse ($levels as $level)
+
                             <tr>
-                                <th>Level Name</th>
-                                <th>Fee</th>
-                                <th>Validity</th>
-                                <th>Benefits</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                                <td class="level-name">
+                                    {{ $level->name }}
+                                </td>
 
-                        <tbody>
+                                <td class="fee">
+                                    ₱{{ number_format($level->fee, 2) }}
+                                </td>
 
-                            @forelse ($levels as $level)
+                                <td>
+                                    {{ $level->validity_period_months }}
+                                    month(s)
+                                </td>
 
-                                <tr>
-                                    <td class="level-name">
-                                        {{ $level->name }}
-                                    </td>
+                                <td class="benefits">
+                                    {{
+                                        $level->benefits
+                                        ?? 'No benefits listed'
+                                    }}
+                                </td>
 
-                                    <td class="fee">
-                                        ₱{{ number_format($level->fee, 2) }}
-                                    </td>
+                                <td>
+                                    @if ($level->is_active)
+                                        <span class="status active">
+                                            Active
+                                        </span>
+                                    @else
+                                        <span class="status inactive">
+                                            Inactive
+                                        </span>
+                                    @endif
+                                </td>
 
-                                    <td>
-                                        {{ $level->validity_period_months }}
-                                        month(s)
-                                    </td>
+                                <td>
+                                    <div class="actions">
 
-                                    <td class="benefits">
-                                        {{ $level->benefits ?? 'No benefits listed' }}
-                                    </td>
+                                        <a
+                                            href="{{ route('membership-levels.show', $level) }}"
+                                            class="action-button view-button"
+                                        >
+                                            View
+                                        </a>
 
-                                    <td>
+                                        <a
+                                            href="{{ route('membership-levels.edit', $level) }}"
+                                            class="action-button edit-button"
+                                        >
+                                            Edit
+                                        </a>
+
                                         @if ($level->is_active)
-                                            <span class="status active">
-                                                Active
-                                            </span>
-                                        @else
-                                            <span class="status inactive">
-                                                Inactive
-                                            </span>
-                                        @endif
-                                    </td>
-
-                                    <td>
-                                        <div class="actions">
-
-                                            <a
-                                                href="{{ route('membership-levels.show', $level) }}"
-                                                class="action-button view-button"
-                                            >
-                                                View
-                                            </a>
-
-                                            <a
-                                                href="{{ route('membership-levels.edit', $level) }}"
-                                                class="action-button edit-button"
-                                            >
-                                                Edit
-                                            </a>
-
-                                            @if ($level->is_active)
-
-                                                <form
-                                                    action="{{ route('membership-levels.deactivate', $level) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Deactivate this membership level?')"
-                                                >
-                                                    @csrf
-                                                    @method('PATCH')
-
-                                                    <button
-                                                        type="submit"
-                                                        class="action-button deactivate-button"
-                                                    >
-                                                        Deactivate
-                                                    </button>
-                                                </form>
-
-                                            @else
-
-                                                <form
-                                                    action="{{ route('membership-levels.activate', $level) }}"
-                                                    method="POST"
-                                                >
-                                                    @csrf
-                                                    @method('PATCH')
-
-                                                    <button
-                                                        type="submit"
-                                                        class="action-button activate-button"
-                                                    >
-                                                        Activate
-                                                    </button>
-                                                </form>
-
-                                            @endif
 
                                             <form
-                                                action="{{ route('membership-levels.destroy', $level) }}"
+                                                action="{{ route('membership-levels.deactivate', $level) }}"
                                                 method="POST"
-                                                onsubmit="return confirm('Permanently delete this membership level?')"
+                                                onsubmit="return confirm('Deactivate this membership level?')"
                                             >
                                                 @csrf
-                                                @method('DELETE')
+                                                @method('PATCH')
 
                                                 <button
                                                     type="submit"
-                                                    class="action-button delete-button"
+                                                    class="action-button deactivate-button"
                                                 >
-                                                    Delete
+                                                    Deactivate
                                                 </button>
                                             </form>
 
-                                        </div>
-                                    </td>
-                                </tr>
+                                        @else
 
-                            @empty
+                                            <form
+                                                action="{{ route('membership-levels.activate', $level) }}"
+                                                method="POST"
+                                            >
+                                                @csrf
+                                                @method('PATCH')
 
-                                <tr>
-                                    <td
-                                        colspan="6"
-                                        class="empty-message"
-                                    >
-                                        No membership levels found.
-                                    </td>
-                                </tr>
+                                                <button
+                                                    type="submit"
+                                                    class="action-button activate-button"
+                                                >
+                                                    Activate
+                                                </button>
+                                            </form>
 
-                            @endforelse
+                                        @endif
 
-                        </tbody>
-                    </table>
+                                        <form
+                                            action="{{ route('membership-levels.destroy', $level) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Permanently delete this membership level?')"
+                                        >
+                                            @csrf
+                                            @method('DELETE')
 
-                </div>
+                                            <button
+                                                type="submit"
+                                                class="action-button delete-button"
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
 
-            </section>
+                                    </div>
+                                </td>
+                            </tr>
 
-        </main>
+                        @empty
 
-    </div>
+                            <tr>
+                                <td
+                                    colspan="6"
+                                    class="empty-message"
+                                >
+                                    No membership levels found.
+                                </td>
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
 
 </body>
 </html>

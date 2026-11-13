@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WeatherController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -124,3 +125,34 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+Route::get(
+    '/member/dashboard',
+    [TaskController::class, 'memberDashboard']
+)
+    ->middleware('auth')
+    ->name('member.dashboard');
+
+    Route::get(
+    '/task-dashboard',
+    [TaskController::class, 'dashboard']
+)
+    ->middleware('auth')
+    ->name('task.dashboard');
+
+    Route::delete(
+    '/tasks/{task}',
+    [TaskController::class, 'destroy']
+)->name('tasks.destroy');
+
+Route::patch(
+    '/member/tasks/{task}/complete',
+    [TaskController::class, 'complete']
+)->name('member.tasks.complete');
+
+
+Route::get('/weather', [
+    WeatherController::class,
+    'show',
+])->name('weather.show');

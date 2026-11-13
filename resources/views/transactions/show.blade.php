@@ -7,185 +7,280 @@
     <title>Transaction Details</title>
 
     <style>
+        :root {
+            --background: #17131b;
+            --panel: #1d1922;
+            --panel-light: #27212d;
+            --border: rgba(255, 255, 255, .14);
+            --text: #f8f4fa;
+            --muted: #b8afbd;
+            --pink: #e984c5;
+            --green: #72d69b;
+            --orange: #e5a45d;
+            --blue: #78c9dd;
+            --red: #f08da8;
+        }
+
         * {
             box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            background: #f8faf9;
-            color: #26332f;
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 85% 0%,
+                    rgba(142, 81, 157, .24),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #151219 0%,
+                    #514653 52%,
+                    #18131d 100%
+                );
+            color: var(--text);
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
                 "Segoe UI",
-                Helvetica,
                 Arial,
                 sans-serif;
             -webkit-font-smoothing: antialiased;
         }
 
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 36px 42px 65px;
+        }
+
         .content {
             width: 100%;
-            max-width: 1050px;
+            max-width: 1080px;
             margin: 0 auto;
-            padding: 45px 35px 70px;
         }
 
         .top-section {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--pink);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         h1 {
             margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.8px;
+            color: var(--text);
+            font-size: 36px;
+            line-height: 1.1;
+            letter-spacing: -.8px;
         }
 
         .subtitle {
-            color: #71807a;
-            margin-top: 9px;
+            margin: 10px 0 0;
+            color: var(--muted);
             font-size: 15px;
         }
 
         .back-button {
-            background: white;
-            color: #337a4b;
-            border: 1px solid #cfe0d7;
-            padding: 11px 17px;
-            border-radius: 9px;
+            flex-shrink: 0;
+            padding: 12px 17px;
+            border: 1px solid rgba(233, 132, 197, .5);
+            border-radius: 10px;
+            background: rgba(233, 132, 197, .08);
+            color: var(--pink);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .2s ease;
         }
 
         .back-button:hover {
-            background: #eef7f1;
-        }
-
-        .details-card {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 32px;
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(34, 70, 58, 0.08);
+            background: rgba(233, 132, 197, .18);
+            transform: translateY(-1px);
         }
 
         .alert {
-            max-width: 900px;
-            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
             padding: 14px 17px;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: opacity .5s ease, transform .5s ease;
         }
 
         .alert-success {
-            color: #337a4b;
-            background: #e2f4e4;
+            border: 1px solid rgba(114, 214, 155, .3);
+            background: rgba(114, 214, 155, .1);
+            color: var(--green);
         }
 
         .alert-error {
-            color: #b83e64;
-            background: #fff0f4;
+            border: 1px solid rgba(240, 141, 168, .3);
+            background: rgba(240, 141, 168, .1);
+            color: var(--red);
+        }
+
+        .alert.hide {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .details-card {
+            width: 100%;
+            padding: 32px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(29, 25, 34, .94);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, .18);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 24px;
+        }
+
+        .section-icon {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border: 1px solid rgba(233, 132, 197, .3);
+            border-radius: 12px;
+            background: rgba(233, 132, 197, .12);
+            color: var(--pink);
+            font-weight: 800;
         }
 
         .section-title {
-            color: #337a4b;
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 25px;
+            margin: 0;
+            color: var(--text);
+            font-size: 21px;
         }
 
         .reference-number {
-            color: #337a4b;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 22px;
+            margin-bottom: 24px;
+            color: var(--pink);
+            font-size: 25px;
+            font-weight: 800;
         }
 
         .details-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
         }
 
         .detail-box {
-            background: #f8fbf9;
-            border: 1px solid #e1ebe5;
-            border-radius: 10px;
+            min-width: 0;
             padding: 17px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .035);
         }
 
         .detail-label {
-            color: #71807a;
-            font-size: 13px;
             margin-bottom: 8px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .7px;
+            text-transform: uppercase;
         }
 
         .detail-value {
-            color: #26332f;
-            font-size: 16px;
+            color: var(--text);
+            font-size: 15px;
             font-weight: 600;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .amount {
+            color: var(--green);
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: capitalize;
+        }
+
+        .status::before {
+            width: 6px;
+            height: 6px;
+            margin-right: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            content: "";
+        }
+
+        .status.pending {
+            background: rgba(229, 164, 93, .14);
+            color: var(--orange);
+        }
+
+        .status.paid,
+        .status.approved {
+            background: rgba(114, 214, 155, .14);
+            color: var(--green);
+        }
+
+        .status.expired,
+        .status.cancelled {
+            background: rgba(240, 141, 168, .14);
+            color: var(--red);
         }
 
         .full-width {
             grid-column: 1 / -1;
         }
 
-        .amount {
-            color: #337a4b;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 7px 13px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-
-        .status.pending {
-            background: #fff0d8;
-            color: #a8631b;
-        }
-
-        .status.paid,
-        .status.approved {
-            background: #e2f4e4;
-            color: #337a4b;
-        }
-
-        .status.expired,
-        .status.cancelled {
-            background: #fff0f4;
-            color: #b83e64;
-        }
-
         .notes-box {
-            background: #fff5f8;
-            border-left: 4px solid #e875a8;
-            border-radius: 9px;
-            padding: 17px;
             margin-top: 20px;
+            padding: 17px;
+            border: 1px solid rgba(233, 132, 197, .25);
+            border-left: 4px solid var(--pink);
+            border-radius: 12px;
+            background: rgba(233, 132, 197, .08);
         }
 
         .notes-title {
-            color: #b83e64;
-            font-weight: 600;
             margin-bottom: 8px;
+            color: var(--pink);
+            font-size: 13px;
+            font-weight: 800;
         }
 
         .notes-text {
-            color: #52635b;
+            color: var(--muted);
             line-height: 1.6;
             white-space: pre-line;
         }
@@ -195,97 +290,132 @@
         }
 
         .payment-section h3 {
-            color: #337a4b;
-            margin-bottom: 15px;
+            margin: 0 0 15px;
+            color: var(--text);
             font-size: 18px;
+        }
+
+        .payment-table-wrapper {
+            width: 100%;
+            overflow-x: hidden;
+            border: 1px solid var(--border);
+            border-radius: 12px;
         }
 
         .payment-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .payment-table th,
         .payment-table td {
-            padding: 12px 10px;
+            padding: 14px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, .09);
             text-align: left;
-            border-bottom: 1px solid #e7eeea;
-            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .payment-table tr:last-child td {
+            border-bottom: none;
         }
 
         .payment-table th {
-            color: #71807a;
-            font-size: 12px;
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: .7px;
             text-transform: uppercase;
         }
 
+        .payment-table td {
+            color: var(--text);
+            font-size: 13px;
+        }
+
         .no-payment {
-            color: #71807a;
-            background: #f8fbf9;
-            padding: 15px;
-            border-radius: 9px;
-            font-size: 14px;
+            padding: 16px;
+            border: 1px dashed var(--border);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, .03);
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
         }
 
         .button-row {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 30px;
         }
 
         .button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 42px;
+            padding: 11px 17px;
             border: none;
-            border-radius: 9px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
+            border-radius: 10px;
             font-family: inherit;
+            font-size: 13px;
+            font-weight: 800;
             text-decoration: none;
             cursor: pointer;
+            transition: .2s ease;
         }
 
-        .approve-button {
-            background: #e2f4e4;
-            color: #337a4b;
-        }
-
-        .approve-button:hover {
-            background: #ccebd2;
-        }
-
-        .receipt-button {
-            background: #dceef3;
-            color: #216075;
-        }
-
-        .receipt-button:hover {
-            background: #c8e5ed;
+        .button:hover {
+            transform: translateY(-1px);
         }
 
         .back-bottom-button {
-            background: #eef3f0;
-            color: #52635b;
+            background: rgba(255, 255, 255, .09);
+            color: var(--muted);
         }
 
-        .back-bottom-button:hover {
-            background: #dfe9e4;
+        .approve-button {
+            background: rgba(114, 214, 155, .16);
+            color: var(--green);
         }
 
-        @media (max-width: 700px) {
-            .content {
-                padding: 25px 18px;
-            }
+        .receipt-button {
+            background: rgba(120, 201, 221, .15);
+            color: var(--blue);
+        }
 
-            .top-section {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 15px;
+        @media (max-width: 900px) {
+            .main {
+                padding: 28px 24px 50px;
             }
 
             .details-card {
-                padding: 22px;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .main {
+                padding: 24px 16px 40px;
+            }
+
+            .top-section {
+                flex-direction: column;
+            }
+
+            .back-button {
+                width: 100%;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .details-card {
+                padding: 20px;
             }
 
             .details-grid {
@@ -296,19 +426,23 @@
                 grid-column: auto;
             }
 
-            .payment-table {
-                display: block;
+            .payment-table-wrapper {
                 overflow-x: auto;
             }
 
+            .payment-table {
+                min-width: 620px;
+                table-layout: auto;
+            }
+
             .button-row {
+                align-items: stretch;
                 flex-direction: column;
             }
 
             .button,
             .button-row form {
                 width: 100%;
-                text-align: center;
             }
         }
     </style>
@@ -316,234 +450,236 @@
 
 <body>
 
-<main class="content">
+<div class="layout">
 
-    <div class="top-section">
-        <div>
-            <h1>Transaction Details</h1>
+    @include('partials.sidebar')
 
-            <p class="subtitle">
-                View complete membership transaction information.
-            </p>
-        </div>
+    <main class="main">
+        <div class="content">
 
-        <a
-            href="{{ route('transactions.index') }}"
-            class="back-button"
-        >
-            ← Back to Transactions
-        </a>
-    </div>
+            <div class="top-section">
+                <div>
+                    <p class="eyebrow">Financial Activity</p>
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+                    <h1>Transaction Details</h1>
 
-    @if (session('error'))
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    <div class="details-card">
-
-        <div class="section-title">
-            Transaction Information
-        </div>
-
-        <div class="reference-number">
-            {{ $transaction->transaction_number }}
-        </div>
-
-        <div class="details-grid">
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Member
+                    <p class="subtitle">
+                        View complete membership transaction information.
+                    </p>
                 </div>
 
-                <div class="detail-value">
-                    {{ $transaction->member?->name ?? 'N/A' }}
-                </div>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Membership Number
-                </div>
-
-                <div class="detail-value">
-                    {{ $transaction->member?->membership_number ?? 'N/A' }}
-                </div>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Transaction Type
-                </div>
-
-                <div class="detail-value">
-                    {{ ucfirst($transaction->transaction_type) }}
-                </div>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Membership Level
-                </div>
-
-                <div class="detail-value">
-                    {{ $transaction->membershipLevel?->name ?? 'N/A' }}
-                </div>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Amount
-                </div>
-
-                <div class="amount">
-                    ₱{{ number_format($transaction->amount, 2) }}
-                </div>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Status
-                </div>
-
-                <span class="status {{ $transaction->status }}">
-                    {{ ucfirst($transaction->status) }}
-                </span>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Transaction Date
-                </div>
-
-                <div class="detail-value">
-                    {{ $transaction->transaction_date?->format('F d, Y') }}
-                </div>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-label">
-                    Membership Start Date
-                </div>
-
-                <div class="detail-value">
-                    {{ $transaction->membership_start_date?->format('F d, Y') ?? 'Not set' }}
-                </div>
-            </div>
-
-            <div class="detail-box full-width">
-                <div class="detail-label">
-                    Membership End Date
-                </div>
-
-                <div class="detail-value">
-                    {{ $transaction->membership_end_date?->format('F d, Y') ?? 'Not set' }}
-                </div>
-            </div>
-
-        </div>
-
-        <div class="notes-box">
-            <div class="notes-title">
-                Notes
-            </div>
-
-            <div class="notes-text">
-                {{ $transaction->notes ?: 'No notes provided.' }}
-            </div>
-        </div>
-
-        <div class="payment-section">
-            <h3>Payment Details</h3>
-
-            @forelse ($transaction->payments as $payment)
-                <table class="payment-table">
-                    <thead>
-                        <tr>
-                            <th>Reference</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>
-                                {{ $payment->payment_reference }}
-                            </td>
-
-                            <td>
-                                ₱{{ number_format($payment->amount, 2) }}
-                            </td>
-
-                            <td>
-                                {{ ucwords(str_replace('_', ' ', $payment->payment_method)) }}
-                            </td>
-
-                            <td>
-                                {{ $payment->payment_date?->format('F d, Y') }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            @empty
-                <div class="no-payment">
-                    No payment has been recorded for this transaction yet.
-                </div>
-            @endforelse
-        </div>
-
-        <div class="button-row">
-
-            <a
-                href="{{ route('transactions.index') }}"
-                class="button back-bottom-button"
-            >
-                Back
-            </a>
-
-            @if ($transaction->status === 'paid')
-                <form
-                    action="{{ route('transactions.approve', $transaction) }}"
-                    method="POST"
-                    onsubmit="return confirm('Approve this paid transaction?')"
-                >
-                    @csrf
-                    @method('PATCH')
-
-                    <button
-                        type="submit"
-                        class="button approve-button"
-                    >
-                        Approve Transaction
-                    </button>
-                </form>
-            @endif
-
-            @if (in_array($transaction->status, ['paid', 'approved']))
                 <a
-                    href="{{ route('transactions.receipt', $transaction) }}"
-                    class="button receipt-button"
-                    target="_blank"
+                    href="{{ route('transactions.index') }}"
+                    class="back-button"
                 >
-                    Print Receipt
+                    ← Back to Transactions
                 </a>
+            </div>
+
+            @if (session('success'))
+                <div class="alert alert-success auto-dismiss">
+                    {{ session('success') }}
+                </div>
             @endif
 
+            @if (session('error'))
+                <div class="alert alert-error auto-dismiss">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <section class="details-card">
+
+                <div class="section-heading">
+                    <div class="section-icon">T</div>
+
+                    <h2 class="section-title">
+                        Transaction Information
+                    </h2>
+                </div>
+
+                <div class="reference-number">
+                    {{ $transaction->transaction_number }}
+                </div>
+
+                <div class="details-grid">
+
+                    <div class="detail-box">
+                        <div class="detail-label">Member</div>
+
+                        <div class="detail-value">
+                            {{ $transaction->member?->name ?? 'N/A' }}
+                        </div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Membership Number</div>
+
+                        <div class="detail-value">
+                            {{ $transaction->member?->membership_number ?? 'N/A' }}
+                        </div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Transaction Type</div>
+
+                        <div class="detail-value">
+                            {{ ucfirst($transaction->transaction_type) }}
+                        </div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Membership Level</div>
+
+                        <div class="detail-value">
+                            {{ $transaction->membershipLevel?->name ?? 'N/A' }}
+                        </div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Amount</div>
+
+                        <div class="amount">
+                            ₱{{ number_format($transaction->amount, 2) }}
+                        </div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Status</div>
+
+                        <span class="status {{ $transaction->status }}">
+                            {{ ucfirst($transaction->status) }}
+                        </span>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Transaction Date</div>
+
+                        <div class="detail-value">
+                            {{ $transaction->transaction_date?->format('F d, Y') }}
+                        </div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Membership Start Date</div>
+
+                        <div class="detail-value">
+                            {{ $transaction->membership_start_date?->format('F d, Y') ?? 'Not set' }}
+                        </div>
+                    </div>
+
+                    <div class="detail-box full-width">
+                        <div class="detail-label">Membership End Date</div>
+
+                        <div class="detail-value">
+                            {{ $transaction->membership_end_date?->format('F d, Y') ?? 'Not set' }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="notes-box">
+                    <div class="notes-title">Notes</div>
+
+                    <div class="notes-text">
+                        {{ $transaction->notes ?: 'No notes provided.' }}
+                    </div>
+                </div>
+
+                <div class="payment-section">
+                    <h3>Payment Details</h3>
+
+                    @forelse ($transaction->payments as $payment)
+                        <div class="payment-table-wrapper">
+                            <table class="payment-table">
+                                <thead>
+                                    <tr>
+                                        <th>Reference</th>
+                                        <th>Amount</th>
+                                        <th>Method</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            {{ $payment->payment_reference }}
+                                        </td>
+
+                                        <td>
+                                            ₱{{ number_format($payment->amount, 2) }}
+                                        </td>
+
+                                        <td>
+                                            {{ ucwords(str_replace('_', ' ', $payment->payment_method)) }}
+                                        </td>
+
+                                        <td>
+                                            {{ $payment->payment_date?->format('F d, Y') }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @empty
+                        <div class="no-payment">
+                            No payment has been recorded for this transaction yet.
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="button-row">
+
+
+                    @if ($transaction->status === 'paid')
+                        <form
+                            action="{{ route('transactions.approve', $transaction) }}"
+                            method="POST"
+                            onsubmit="return confirm('Approve this paid transaction?')"
+                        >
+                            @csrf
+                            @method('PATCH')
+
+                            <button
+                                type="submit"
+                                class="button approve-button"
+                            >
+                                Approve Transaction
+                            </button>
+                        </form>
+                    @endif
+
+                    @if (in_array($transaction->status, ['paid', 'approved']))
+                        <a
+                            href="{{ route('transactions.receipt', $transaction) }}"
+                            class="button receipt-button"
+                            target="_blank"
+                        >
+                            Print Receipt
+                        </a>
+                    @endif
+
+                </div>
+
+            </section>
+
         </div>
+    </main>
 
-    </div>
+</div>
 
-</main>
+<script>
+    setTimeout(function () {
+        document.querySelectorAll('.auto-dismiss').forEach(function (message) {
+            message.classList.add('hide');
+
+            setTimeout(function () {
+                message.remove();
+            }, 500);
+        });
+    }, 3000);
+</script>
 
 </body>
 </html>

@@ -7,88 +7,136 @@
     <title>Edit Member</title>
 
     <style>
+        :root {
+            --panel: #1c1821;
+            --panel-light: #25202b;
+            --border: rgba(255, 255, 255, .14);
+            --text: #f8f4fa;
+            --muted: #b8afbd;
+            --pink: #e984c5;
+            --pink-dark: #c967a8;
+            --red: #f08da8;
+        }
+
         * {
             box-sizing: border-box;
+            font-family: inherit;
         }
 
         body {
             margin: 0;
-            background: #f8faf9;
-            color: #26332f;
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 82% 0%,
+                    rgba(142, 81, 157, .22),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #151219 0%,
+                    #5c4e59 52%,
+                    #18131d 100%
+                );
+            color: var(--text);
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
                 "Segoe UI",
-                Helvetica,
                 Arial,
                 sans-serif;
-
-            -webkit-font-smoothing: antialiased;
         }
 
-        .content {
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 34px 42px 60px;
+        }
+
+        .top-section,
+        .form-card {
             width: 100%;
-            max-width: 1050px;
-            margin: 0 auto;
-            padding: 45px 35px;
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .top-section {
             display: flex;
+            align-items: flex-end;
             justify-content: space-between;
-            align-items: center;
+            gap: 25px;
             margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--pink);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
         }
 
         h1 {
             margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.8px;
+            color: var(--text);
+            font-size: 36px;
+            letter-spacing: -.9px;
         }
 
         .subtitle {
-            color: #71807a;
-            margin-top: 8px;
-        }
-
-        .back-button {
-            background: white;
-            color: #337a4b;
-            border: 1px solid #cfe0d7;
-            padding: 11px 17px;
-            border-radius: 9px;
-            text-decoration: none;
+            margin: 9px 0 0;
+            color: var(--muted);
             font-size: 14px;
         }
 
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 43px;
+            padding: 0 17px;
+            border: 1px solid rgba(233, 132, 197, .45);
+            border-radius: 10px;
+            background: rgba(233, 132, 197, .08);
+            color: var(--pink);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: .2s ease;
+        }
+
         .back-button:hover {
-            background: #eef7f1;
+            background: rgba(233, 132, 197, .18);
+            transform: translateY(-1px);
         }
 
         .form-card {
-            background: white;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 32px;
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(34, 70, 58, 0.08);
+            padding: 34px 36px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: rgba(24, 21, 28, .96);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, .24);
         }
 
         .section-title {
-            color: #337a4b;
+            margin-bottom: 25px;
+            color: var(--pink);
             font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 24px;
+            font-weight: 700;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 22px;
         }
 
         .form-group {
@@ -101,100 +149,170 @@
         }
 
         label {
-            font-weight: 600;
             margin-bottom: 8px;
-            font-size: 14px;
+            color: #eee7f1;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         input,
         select,
         textarea {
             width: 100%;
-            border: 1px solid #d7e3dd;
-            border-radius: 9px;
-            padding: 12px;
+            padding: 13px 14px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 10px;
+            outline: none;
+            background: var(--panel-light);
+            color: var(--text);
             font-size: 14px;
-            font-family: inherit;
-            color: #26332f;
-            background: #fbfdfc;
+            transition: .2s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #8e8795;
         }
 
         input:focus,
         select:focus,
         textarea:focus {
-            outline: none;
-            border-color: #86c98b;
-            box-shadow: 0 0 0 3px rgba(134, 201, 139, 0.2);
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(233, 132, 197, .13);
+        }
+
+        select option {
+            background: var(--panel-light);
+            color: var(--text);
         }
 
         textarea {
-            resize: vertical;
             min-height: 110px;
+            resize: vertical;
         }
 
         .error {
-            color: #d95378;
-            font-size: 13px;
-            margin-top: 5px;
+            margin-top: 7px;
+            color: var(--red);
+            font-size: 12px;
         }
 
         .general-errors {
-            background: #fff0f4;
-            color: #b83e64;
-            border: 1px solid #f2bfd0;
-            padding: 13px;
-            border-radius: 9px;
             margin-bottom: 22px;
+            padding: 13px 15px;
+            border: 1px solid rgba(240, 141, 168, .3);
+            border-radius: 10px;
+            background: rgba(240, 141, 168, .1);
+            color: var(--red);
+            font-size: 13px;
+        }
+
+        .map-help {
+            margin: 0 0 10px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        #map {
+            width: 100%;
+            height: 330px;
+            margin-bottom: 17px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 11px;
+            overflow: hidden;
+        }
+
+        .coordinates-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         .button-row {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            margin-top: 28px;
+            gap: 11px;
+            margin-top: 30px;
         }
 
         .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 20px;
             border: none;
-            padding: 12px 20px;
             border-radius: 9px;
-            font-size: 14px;
-            font-family: inherit;
-            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
             text-decoration: none;
+            cursor: pointer;
+            transition: .2s ease;
         }
 
         .cancel-button {
-            background: #eef3f0;
-            color: #52635b;
+            background: #302a36;
+            color: #d7ceda;
         }
 
         .cancel-button:hover {
-            background: #dfe9e4;
+            background: #403747;
+            transform: translateY(-1px);
         }
 
         .update-button {
-            background: #e875a8;
-            color: white;
-            font-weight: 600;
+            background: linear-gradient(
+                135deg,
+                var(--pink),
+                #bd71b5
+            );
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(233, 132, 197, .18);
         }
 
         .update-button:hover {
-            background: #d95f94;
+            background: var(--pink-dark);
+            transform: translateY(-1px);
         }
 
-        @media (max-width: 700px) {
-            .content {
-                padding: 25px 18px;
+        @media (max-width: 900px) {
+            .main {
+                padding: 30px 25px 50px;
             }
 
             .top-section {
                 align-items: flex-start;
                 flex-direction: column;
-                gap: 15px;
             }
 
-            .form-grid {
+            .back-button {
+                width: 100%;
+            }
+
+            .form-card {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+
+            .main {
+                padding: 25px 17px 40px;
+            }
+
+            h1 {
+                font-size: 31px;
+            }
+
+            .form-card {
+                padding: 22px 18px;
+            }
+
+            .form-grid,
+            .coordinates-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -202,16 +320,11 @@
                 grid-column: auto;
             }
 
-            .form-card {
-                padding: 22px;
-            }
-
             .button-row {
                 flex-direction: column;
             }
 
             .button {
-                text-align: center;
                 width: 100%;
             }
         }
@@ -220,11 +333,22 @@
 
 <body>
 
-    <main class="content">
+<div class="layout">
+
+    @include('partials.sidebar')
+
+    <main class="main">
 
         <div class="top-section">
+
             <div>
-                <h1>Edit Member</h1>
+                <p class="eyebrow">
+                    Member directory
+                </p>
+
+                <h1>
+                    Edit Member
+                </h1>
 
                 <p class="subtitle">
                     Update the member's information.
@@ -232,11 +356,12 @@
             </div>
 
             <a
-                href="{{ route('members.show', $member) }}"
+                href="{{ route('members.index') }}"
                 class="back-button"
             >
-                ← Back to Profile
+                ← Back to Members
             </a>
+
         </div>
 
         <div class="form-card">
@@ -261,6 +386,7 @@
                 <div class="form-grid">
 
                     <div class="form-group">
+
                         <label for="membership_number">
                             Membership Number
                         </label>
@@ -274,11 +400,15 @@
                         >
 
                         @error('membership_number')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
                     </div>
 
                     <div class="form-group">
+
                         <label for="status">
                             Status
                         </label>
@@ -304,11 +434,15 @@
                         </select>
 
                         @error('status')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
                     </div>
 
                     <div class="form-group">
+
                         <label for="name">
                             Full Name
                         </label>
@@ -322,11 +456,15 @@
                         >
 
                         @error('name')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
                     </div>
 
                     <div class="form-group">
+
                         <label for="email">
                             Email Address
                         </label>
@@ -340,11 +478,15 @@
                         >
 
                         @error('email')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
                     </div>
 
                     <div class="form-group">
+
                         <label for="phone_number">
                             Phone Number
                         </label>
@@ -358,11 +500,15 @@
                         >
 
                         @error('phone_number')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
                     </div>
 
                     <div class="form-group">
+
                         <label for="membership_category_id">
                             Membership Category
                         </label>
@@ -373,21 +519,27 @@
                             required
                         >
                             @foreach ($categories as $category)
+
                                 <option
                                     value="{{ $category->id }}"
                                     {{ old('membership_category_id', $member->membership_category_id) == $category->id ? 'selected' : '' }}
                                 >
                                     {{ $category->name }}
                                 </option>
+
                             @endforeach
                         </select>
 
                         @error('membership_category_id')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
                     </div>
 
                     <div class="form-group">
+
                         <label for="membership_level_id">
                             Membership Level
                         </label>
@@ -398,6 +550,7 @@
                             required
                         >
                             @foreach ($levels as $level)
+
                                 <option
                                     value="{{ $level->id }}"
                                     {{ old('membership_level_id', $member->membership_level_id) == $level->id ? 'selected' : '' }}
@@ -405,15 +558,20 @@
                                     {{ $level->name }} —
                                     ₱{{ number_format($level->fee, 2) }}
                                 </option>
+
                             @endforeach
                         </select>
 
                         @error('membership_level_id')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
                     </div>
 
                     <div class="form-group full-width">
+
                         <label for="address">
                             Address
                         </label>
@@ -425,8 +583,70 @@
                         >{{ old('address', $member->address) }}</textarea>
 
                         @error('address')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error">
+                                {{ $message }}
+                            </span>
                         @enderror
+
+                    </div>
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            Select Member Location
+                        </label>
+
+                        <p class="map-help">
+                            Click on the map or drag the marker to update the
+                            member's location.
+                        </p>
+
+                        <div id="map"></div>
+
+                        <div class="coordinates-grid">
+
+                            <div>
+                                <label for="latitude">
+                                    Latitude
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="latitude"
+                                    name="latitude"
+                                    value="{{ old('latitude', $member->latitude) }}"
+                                    readonly
+                                >
+                            </div>
+
+                            <div>
+                                <label for="longitude">
+                                    Longitude
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="longitude"
+                                    name="longitude"
+                                    value="{{ old('longitude', $member->longitude) }}"
+                                    readonly
+                                >
+                            </div>
+
+                        </div>
+
+                        @error('latitude')
+                            <span class="error">
+                                {{ $message }}
+                            </span>
+                        @enderror
+
+                        @error('longitude')
+                            <span class="error">
+                                {{ $message }}
+                            </span>
+                        @enderror
+
                     </div>
 
                 </div>
@@ -434,7 +654,7 @@
                 <div class="button-row">
 
                     <a
-                        href="{{ route('members.show', $member) }}"
+                        href="{{ route('members.index') }}"
                         class="button cancel-button"
                     >
                         Cancel
@@ -448,11 +668,81 @@
                     </button>
 
                 </div>
+
             </form>
 
         </div>
 
     </main>
+
+</div>
+
+<script>
+    let map;
+    let marker;
+
+    function initMap() {
+        const savedLatitude = Number(
+            @json(old('latitude', $member->latitude ?? 14.5995))
+        );
+
+        const savedLongitude = Number(
+            @json(old('longitude', $member->longitude ?? 120.9842))
+        );
+
+        const savedLocation = {
+            lat: savedLatitude,
+            lng: savedLongitude
+        };
+
+        map = new google.maps.Map(
+            document.getElementById('map'),
+            {
+                center: savedLocation,
+                zoom: 14,
+                mapTypeControl: true,
+                streetViewControl: false,
+                fullscreenControl: true
+            }
+        );
+
+        marker = new google.maps.Marker({
+            position: savedLocation,
+            map: map,
+            draggable: true,
+            title: 'Member location'
+        });
+
+        document.getElementById('latitude').value =
+            savedLatitude.toFixed(7);
+
+        document.getElementById('longitude').value =
+            savedLongitude.toFixed(7);
+
+        map.addListener('click', function (event) {
+            marker.setPosition(event.latLng);
+            updateCoordinates(event.latLng);
+        });
+
+        marker.addListener('dragend', function (event) {
+            updateCoordinates(event.latLng);
+        });
+    }
+
+    function updateCoordinates(location) {
+        document.getElementById('latitude').value =
+            location.lat().toFixed(7);
+
+        document.getElementById('longitude').value =
+            location.lng().toFixed(7);
+    }
+</script>
+
+<script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&callback=initMap">
+</script>
 
 </body>
 </html>

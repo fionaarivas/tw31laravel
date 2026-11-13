@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\User;
 use App\Models\MembershipCategory;
 use App\Models\MembershipLevel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -51,21 +54,40 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:members,email',
+            'email' => 'required|email|unique:members,email|unique:users,email',
             'phone_number' => 'required|string|max:20',
             'address' => 'required|string',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'membership_category_id' => 'required|exists:membership_categories,id',
             'membership_level_id' => 'required|exists:membership_levels,id',
         ]);
 
         $nextNumber = (Member::max('id') ?? 0) + 1;
 
-        $validated['membership_number'] =
+        $membershipNumber =
             'MEM-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
 
-        $validated['status'] = 'active';
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make('member12345'),
+            'role' => 'member',
+        ]);
 
-        Member::create($validated);
+        Member::create([
+            'user_id' => $user->id,
+            'membership_number' => $membershipNumber,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'],
+            'address' => $validated['address'],
+            'latitude' => $validated['latitude'] ?? null,
+            'longitude' => $validated['longitude'] ?? null,
+            'membership_category_id' => $validated['membership_category_id'],
+            'membership_level_id' => $validated['membership_level_id'],
+            'status' => 'active',
+        ]);
 
         return redirect()
             ->route('members.index')
@@ -77,6 +99,9 @@ class MemberController extends Controller
         $member->load([
             'membershipCategory',
             'membershipLevel',
+            'membershipTransactions.membershipLevel',
+            'membershipTransactions.payments',
+            'tasks',
         ]);
 
         return view('members.show', compact('member'));
@@ -87,11 +112,10 @@ class MemberController extends Controller
         $categories = MembershipCategory::where('is_active', true)->get();
         $levels = MembershipLevel::where('is_active', true)->get();
 
-        return view('members.edit', compact(
-            'member',
-            'categories',
-            'levels'
-        ));
+        return view(
+            'members.edit',
+            compact('member', 'categories', 'levels')
+        );
     }
 
     public function update(Request $request, Member $member)
@@ -111,6 +135,8 @@ class MemberController extends Controller
             ],
             'phone_number' => 'required|string|max:20',
             'address' => 'required|string',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'membership_category_id' => 'required|exists:membership_categories,id',
             'membership_level_id' => 'required|exists:membership_levels,id',
             'status' => 'required|in:active,inactive',
@@ -118,55 +144,81 @@ class MemberController extends Controller
 
         $member->update($validated);
 
+        if ($member->user) {
+            $member->user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+            ]);
+        }
+
         return redirect()
             ->route('members.index')
             ->with('success', 'Member updated successfully.');
     }
 
-    public function destroy(Member $member)
-   {
-    $member->delete();
+   public function destroy(Member $member)
+{
+    DB::transaction(function () use ($member) {
+        
+        $member->tasks()->delete();
+
+        
+        $member->membershipTransactions()
+            ->with('payments')
+            ->get()
+            ->each(function ($transaction) {
+                $transaction->payments()->delete();
+                $transaction->delete();
+            });
+
+        
+        if ($member->user) {
+            $member->user->delete();
+        }
+
+       
+        $member->delete();
+    });
 
     return redirect()
         ->route('members.index')
-        ->with('success', 'Member deleted permanently.');
-    }
+        ->with('success', 'Member deleted successfully.');
+}
 
     public function deactivate(Member $member)
-{
-    $member->update([
-        'status' => 'inactive',
-    ]);
+    {
+        $member->update([
+            'status' => 'inactive',
+        ]);
 
-    return redirect()
-        ->route('members.index')
-        ->with('success', 'Member deactivated successfully.');
-}
+        return redirect()
+            ->route('members.index')
+            ->with('success', 'Member deactivated successfully.');
+    }
 
-public function activate(Member $member)
-{
-    $member->update([
-        'status' => 'active',
-    ]);
+    public function activate(Member $member)
+    {
+        $member->update([
+            'status' => 'active',
+        ]);
 
-    return redirect()
-        ->route('members.index')
-        ->with('success', 'Member activated successfully.');
-}
+        return redirect()
+            ->route('members.index')
+            ->with('success', 'Member activated successfully.');
+    }
 
-public function transactionHistory(Member $member)
-{
-    $member->load([
-        'membershipCategory',
-        'membershipLevel',
-        'membershipTransactions.membershipLevel',
-        'membershipTransactions.payments',
-    ]);
+    public function transactionHistory(Member $member)
+    {
+        $member->load([
+            'membershipCategory',
+            'membershipLevel',
+            'membershipTransactions.membershipLevel',
+            'membershipTransactions.payments',
+        ]);
 
-    return view(
-        'members.transactions',
-        compact('member')
-    );
-}
-
+        return view(
+            'members.transactions',
+            compact('member')
+        );
+    }
 }

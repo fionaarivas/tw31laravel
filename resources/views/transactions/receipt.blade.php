@@ -7,244 +7,308 @@
     <title>Transaction Receipt</title>
 
     <style>
+        :root {
+            --background: #17131b;
+            --panel: #1d1922;
+            --panel-light: #27212d;
+            --border: rgba(255, 255, 255, .14);
+            --text: #f8f4fa;
+            --muted: #b8afbd;
+            --pink: #e984c5;
+            --green: #72d69b;
+            --blue: #78c9dd;
+        }
+
         * {
             box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            background: #eef3f0;
-            color: #26332f;
+            min-height: 100vh;
+            padding: 28px 18px 60px;
+            background:
+                radial-gradient(
+                    circle at 85% 0%,
+                    rgba(142, 81, 157, .24),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #151219 0%,
+                    #514653 52%,
+                    #18131d 100%
+                );
+            color: var(--text);
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
                 "Segoe UI",
-                Helvetica,
                 Arial,
                 sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         .actions {
-            width: 100%;
-            max-width: 760px;
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 12px;
-            margin: 25px auto 15px;
+            gap: 10px;
+            width: 100%;
+            max-width: 820px;
+            margin: 0 auto 18px;
         }
 
         .button {
             display: inline-flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-width: 125px;
-            height: 44px;
+            min-height: 43px;
+            padding: 11px 18px;
             border: none;
             border-radius: 10px;
-            padding: 0 20px;
             font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 800;
             text-decoration: none;
             cursor: pointer;
             transition: .2s ease;
         }
 
+        .button:hover {
+            transform: translateY(-1px);
+        }
+
         .print-button {
-            background: #e875a8;
+            background: linear-gradient(
+                135deg,
+                #e984c5,
+                #bd71b5
+            );
             color: white;
         }
 
-        .print-button:hover {
-            background: #d95f94;
-        }
-
         .back-button {
-            background: white;
-            color: #287b66;
-            border: 1px solid #bcd8cc;
-        }
-
-        .back-button:hover {
-            background: #e7f5ef;
-            border-color: #287b66;
+            border: 1px solid rgba(255, 255, 255, .16);
+            background: rgba(255, 255, 255, .08);
+            color: var(--muted);
         }
 
         .receipt {
             width: 100%;
-            max-width: 760px;
-            margin: 0 auto 40px;
+            max-width: 820px;
+            margin: 0 auto;
             padding: 42px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 5px 20px rgba(34, 70, 58, .1);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(29, 25, 34, .96);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .22);
         }
 
         .header {
-            text-align: center;
-            border-bottom: 2px solid #e875a8;
+            margin-bottom: 30px;
             padding-bottom: 24px;
-            margin-bottom: 28px;
+            border-bottom: 1px solid rgba(233, 132, 197, .5);
+            text-align: center;
         }
 
         .brand {
             margin: 0;
-            color: #193b35;
-            font-size: 30px;
-            font-weight: 700;
+            color: var(--text);
+            font-size: 31px;
+            font-weight: 800;
+            letter-spacing: -.8px;
         }
 
         .brand span {
-            color: #e875a8;
+            color: var(--pink);
         }
 
         .receipt-title {
             margin: 10px 0 0;
-            color: #337a4b;
-            font-size: 21px;
-            font-weight: 600;
+            color: var(--pink);
+            font-size: 19px;
+            font-weight: 800;
         }
 
         .reference {
-            margin-top: 8px;
-            color: #71807a;
-            font-size: 14px;
+            margin: 9px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .reference strong {
+            color: var(--text);
         }
 
         .section {
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
         .section-title {
-            margin-bottom: 13px;
-            color: #337a4b;
-            font-size: 16px;
-            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--pink);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: .3px;
         }
 
         .details {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 13px 28px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px 18px;
         }
 
         .detail {
-            padding-bottom: 11px;
-            border-bottom: 1px solid #e5ece8;
+            min-width: 0;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, .035);
         }
 
         .label {
             display: block;
-            margin-bottom: 5px;
-            color: #71807a;
-            font-size: 12px;
+            margin-bottom: 7px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .7px;
             text-transform: uppercase;
         }
 
         .value {
-            color: #26332f;
-            font-size: 15px;
+            display: block;
+            color: var(--text);
+            font-size: 14px;
             font-weight: 600;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .amount-box {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
+            gap: 20px;
+            margin-top: 16px;
             padding: 17px;
-            border-radius: 10px;
-            background: #e7f5ef;
+            border: 1px solid rgba(114, 214, 155, .25);
+            border-radius: 11px;
+            background: rgba(114, 214, 155, .1);
         }
 
         .amount-label {
-            color: #287b66;
-            font-weight: 600;
+            color: var(--green);
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .amount {
-            color: #287b66;
+            color: var(--green);
             font-size: 22px;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .status {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            background: #e2f4e4;
-            color: #337a4b;
-            font-size: 13px;
-            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(114, 214, 155, .14);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
             text-transform: capitalize;
+        }
+
+        .status::before {
+            width: 6px;
+            height: 6px;
+            margin-right: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            content: "";
+        }
+
+        .payment-table-wrapper {
+            width: 100%;
+            overflow-x: hidden;
+            border: 1px solid var(--border);
+            border-radius: 11px;
         }
 
         .payment-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .payment-table th,
         .payment-table td {
-            padding: 11px 8px;
-            border-bottom: 1px solid #e5ece8;
+            padding: 13px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, .09);
             text-align: left;
-            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .payment-table tr:last-child td {
+            border-bottom: none;
         }
 
         .payment-table th {
-            color: #71807a;
-            font-size: 11px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .7px;
             text-transform: uppercase;
         }
 
+        .payment-table td {
+            color: var(--text);
+            font-size: 13px;
+        }
+
         .notes {
-            padding: 14px;
-            border-left: 4px solid #e875a8;
-            border-radius: 8px;
-            background: #fff5f8;
-            color: #52635b;
+            padding: 15px;
+            border: 1px solid rgba(233, 132, 197, .25);
+            border-left: 4px solid var(--pink);
+            border-radius: 10px;
+            background: rgba(233, 132, 197, .08);
+            color: var(--muted);
+            font-size: 13px;
             line-height: 1.6;
+            white-space: pre-line;
         }
 
         .footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #e5ece8;
-            color: #71807a;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
             text-align: center;
-            font-size: 13px;
         }
 
-        @media print {
+        @media (max-width: 650px) {
             body {
-                background: white;
-            }
-
-            .receipt {
-                max-width: 100%;
-                margin: 0;
-                padding: 20px;
-                box-shadow: none;
+                padding: 20px 12px 40px;
             }
 
             .actions {
-                display: none;
+                justify-content: stretch;
             }
-        }
 
-        @media (max-width: 600px) {
-            .actions {
-                padding: 0 15px;
-                justify-content: center;
+            .button {
+                flex: 1;
+                min-width: 0;
             }
 
             .receipt {
-                margin: 0 15px 25px;
-                padding: 25px 20px;
+                padding: 25px 19px;
             }
 
             .details {
@@ -252,17 +316,79 @@
             }
 
             .amount-box {
-                display: block;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 7px;
             }
 
-            .amount {
-                display: block;
-                margin-top: 8px;
+            .payment-table-wrapper {
+                overflow-x: auto;
             }
 
-            .button {
-                min-width: 0;
-                flex: 1;
+            .payment-table {
+                min-width: 620px;
+                table-layout: auto;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+                color: #222;
+            }
+
+            .actions {
+                display: none;
+            }
+
+            .receipt {
+                max-width: 100%;
+                margin: 0;
+                padding: 25px;
+                border: none;
+                border-radius: 0;
+                background: white;
+                box-shadow: none;
+                color: #222;
+            }
+
+            .brand,
+            .value,
+            .payment-table td {
+                color: #222;
+            }
+
+            .receipt-title,
+            .section-title {
+                color: #8e4c82;
+            }
+
+            .reference,
+            .label,
+            .footer {
+                color: #666;
+            }
+
+            .detail {
+                border-color: #ddd;
+                background: white;
+            }
+
+            .amount-box {
+                border-color: #b8dfc2;
+                background: #eef9f1;
+            }
+
+            .notes {
+                border-color: #e8bfd9;
+                background: #fff5fa;
+                color: #555;
+            }
+
+            .payment-table th,
+            .payment-table td {
+                border-color: #ddd;
             }
         }
     </style>
@@ -302,7 +428,7 @@
 
         <p class="reference">
             Transaction No.
-            {{ $transaction->transaction_number }}
+            <strong>{{ $transaction->transaction_number }}</strong>
         </p>
     </header>
 
@@ -412,36 +538,38 @@
 
         @forelse ($transaction->payments as $payment)
 
-            <table class="payment-table">
-                <thead>
-                    <tr>
-                        <th>Payment Reference</th>
-                        <th>Method</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
+            <div class="payment-table-wrapper">
+                <table class="payment-table">
+                    <thead>
+                        <tr>
+                            <th>Payment Reference</th>
+                            <th>Method</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    <tr>
-                        <td>
-                            {{ $payment->payment_reference }}
-                        </td>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{ $payment->payment_reference }}
+                            </td>
 
-                        <td>
-                            {{ ucwords(str_replace('_', ' ', $payment->payment_method)) }}
-                        </td>
+                            <td>
+                                {{ ucwords(str_replace('_', ' ', $payment->payment_method)) }}
+                            </td>
 
-                        <td>
-                            {{ $payment->payment_date?->format('F d, Y') }}
-                        </td>
+                            <td>
+                                {{ $payment->payment_date?->format('F d, Y') }}
+                            </td>
 
-                        <td>
-                            ₱{{ number_format($payment->amount, 2) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <td>
+                                ₱{{ number_format($payment->amount, 2) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
         @empty
 

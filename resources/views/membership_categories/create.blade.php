@@ -7,115 +7,176 @@
     <title>Add Membership Category</title>
 
     <style>
+        :root {
+            --background: #151219;
+            --panel: #1c1821;
+            --panel-light: #25202b;
+            --border: rgba(255, 255, 255, .14);
+            --text: #f8f4fa;
+            --muted: #b8afbd;
+            --pink: #e984c5;
+            --pink-dark: #c967a8;
+            --green: #72d69b;
+            --red: #f08da8;
+        }
+
         * {
             box-sizing: border-box;
+            font-family: inherit;
         }
 
         body {
             margin: 0;
-            background: #f8faf9;
-            color: #26332f;
-
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 82% 0%,
+                    rgba(142, 81, 157, .22),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #151219 0%,
+                    #5c4e59 52%,
+                    #18131d 100%
+                );
+            color: var(--text);
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
                 "Segoe UI",
-                Helvetica,
                 Arial,
                 sans-serif;
-
-            -webkit-font-smoothing: antialiased;
         }
 
-        .content {
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 34px 42px 60px;
+        }
+
+        .top-section,
+        .form-card {
             width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 50px 30px;
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .top-section {
             display: flex;
+            align-items: flex-end;
             justify-content: space-between;
-            align-items: center;
+            gap: 25px;
             margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--pink);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
         }
 
         h1 {
             margin: 0;
-            font-size: 32px;
-            letter-spacing: -0.8px;
+            color: var(--text);
+            font-size: 36px;
+            letter-spacing: -.9px;
         }
 
         .subtitle {
-            color: #71807a;
-            margin-top: 8px;
+            margin: 9px 0 0;
+            color: var(--muted);
+            font-size: 14px;
         }
 
         .back-button {
-            background: white;
-            color: #337a4b;
-            border: 1px solid #cfe0d7;
-            padding: 11px 17px;
-            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 43px;
+            padding: 0 17px;
+            border: 1px solid rgba(233, 132, 197, .45);
+            border-radius: 10px;
+            background: rgba(233, 132, 197, .08);
+            color: var(--pink);
+            font-size: 13px;
+            font-weight: 700;
             text-decoration: none;
-            font-size: 14px;
+            white-space: nowrap;
+            transition: .2s ease;
         }
 
         .back-button:hover {
-            background: #eef7f1;
+            background: rgba(233, 132, 197, .18);
+            transform: translateY(-1px);
         }
 
         .form-card {
-            background: white;
-            padding: 32px;
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(34, 70, 58, 0.08);
+            padding: 34px 36px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: rgba(24, 21, 28, .96);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, .24);
         }
 
         .section-title {
-            color: #337a4b;
+            margin-bottom: 24px;
+            color: var(--pink);
             font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 22px;
+            font-weight: 700;
         }
 
         .category-notice {
-            background: #eef7f1;
-            border: 1px solid #cfe5d5;
-            color: #337a4b;
-            padding: 16px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            font-size: 14px;
+            margin-bottom: 27px;
+            padding: 17px;
+            border: 1px solid rgba(233, 132, 197, .32);
+            border-radius: 12px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(233, 132, 197, .12),
+                    rgba(142, 81, 157, .10)
+                );
         }
 
         .category-notice strong {
-            font-size: 15px;
+            color: var(--pink);
+            font-size: 14px;
         }
 
         .category-notice p {
-            color: #71807a;
-            margin: 8px 0 14px;
+            margin: 8px 0 15px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .existing-categories {
             display: flex;
+            align-items: center;
             flex-wrap: wrap;
             gap: 9px;
         }
 
         .existing-category {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 7px;
-            background: white;
-            border: 1px solid #d7e8dc;
-            padding: 8px 11px;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, .15);
             border-radius: 20px;
-            color: #26332f;
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+            font-size: 12px;
         }
 
         .existing-category span {
@@ -123,47 +184,53 @@
         }
 
         .existing-category small {
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 10px;
+            font-weight: 700;
         }
 
         .active-label {
-            color: #337a4b;
+            color: var(--green);
         }
 
         .inactive-label {
-            color: #b83e64;
+            color: var(--red);
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            margin-bottom: 20px;
+            margin-bottom: 21px;
         }
 
         label {
-            font-size: 14px;
-            font-weight: 600;
             margin-bottom: 8px;
+            color: #eee7f1;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         input,
         textarea {
             width: 100%;
-            padding: 13px;
-            border: 1px solid #d7e3dd;
-            border-radius: 9px;
-            background: #fbfdfc;
-            color: #26332f;
+            padding: 13px 14px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 10px;
+            outline: none;
+            background: var(--panel-light);
+            color: var(--text);
             font-size: 14px;
-            font-family: inherit;
+            transition: .2s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #8e8795;
         }
 
         input:focus,
         textarea:focus {
-            outline: none;
-            border-color: #86c98b;
-            box-shadow: 0 0 0 3px rgba(134, 201, 139, 0.2);
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(233, 132, 197, .13);
         }
 
         textarea {
@@ -172,75 +239,109 @@
         }
 
         .input-help {
-            color: #71807a;
-            font-size: 13px;
-            margin-top: 6px;
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
         }
 
         .error {
-            color: #d95378;
-            font-size: 13px;
-            margin-top: 6px;
+            margin-top: 7px;
+            color: var(--red);
+            font-size: 12px;
         }
 
         .general-errors {
-            background: #fff0f4;
-            color: #b83e64;
-            border: 1px solid #f2bfd0;
-            padding: 13px;
-            border-radius: 9px;
             margin-bottom: 22px;
+            padding: 13px 15px;
+            border: 1px solid rgba(240, 141, 168, .3);
+            border-radius: 10px;
+            background: rgba(240, 141, 168, .1);
+            color: var(--red);
+            font-size: 13px;
         }
 
         .button-row {
             display: flex;
+            align-items: center;
             justify-content: flex-end;
-            gap: 12px;
-            margin-top: 28px;
+            gap: 11px;
+            margin-top: 30px;
         }
 
         .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 20px;
             border: none;
-            padding: 12px 20px;
             border-radius: 9px;
-            font-family: inherit;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 700;
             text-decoration: none;
             cursor: pointer;
+            transition: .2s ease;
         }
 
         .cancel-button {
-            background: #eef3f0;
-            color: #52635b;
+            background: #302a36;
+            color: #d7ceda;
         }
 
         .cancel-button:hover {
-            background: #dfe9e4;
+            background: #403747;
         }
 
         .save-button {
-            background: #e875a8;
-            color: white;
-            font-weight: 600;
+            background: linear-gradient(
+                135deg,
+                var(--pink),
+                #bd71b5
+            );
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(233, 132, 197, .18);
         }
 
         .save-button:hover {
-            background: #d95f94;
+            background: var(--pink-dark);
+            transform: translateY(-1px);
         }
 
-        @media (max-width: 600px) {
-            .content {
-                padding: 25px 18px;
+        @media (max-width: 900px) {
+            .main {
+                padding: 30px 25px 50px;
             }
 
             .top-section {
                 align-items: flex-start;
                 flex-direction: column;
-                gap: 15px;
+            }
+
+            .back-button {
+                width: 100%;
             }
 
             .form-card {
-                padding: 22px;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .layout {
+                display: block;
+            }
+
+            .main {
+                padding: 25px 17px 40px;
+            }
+
+            h1 {
+                font-size: 31px;
+            }
+
+            .form-card {
+                padding: 22px 18px;
             }
 
             .button-row {
@@ -248,7 +349,6 @@
             }
 
             .button {
-                text-align: center;
                 width: 100%;
             }
         }
@@ -257,11 +357,22 @@
 
 <body>
 
-    <main class="content">
+<div class="layout">
+
+    @include('partials.sidebar')
+
+    <main class="main">
 
         <div class="top-section">
+
             <div>
-                <h1>Add Membership Category</h1>
+                <p class="eyebrow">
+                    Member settings
+                </p>
+
+                <h1>
+                    Add Membership Category
+                </h1>
 
                 <p class="subtitle">
                     Create a new category for your members.
@@ -274,6 +385,7 @@
             >
                 ← Back to Categories
             </a>
+
         </div>
 
         <div class="form-card">
@@ -289,7 +401,10 @@
             </div>
 
             <div class="category-notice">
-                <strong>Existing membership categories</strong>
+
+                <strong>
+                    Existing membership categories
+                </strong>
 
                 <p>
                     Category names must be unique. Please choose a name that
@@ -297,8 +412,11 @@
                 </p>
 
                 <div class="existing-categories">
+
                     @forelse ($existingCategories as $existingCategory)
+
                         <div class="existing-category">
+
                             <span>
                                 {{ $existingCategory->name }}
                             </span>
@@ -312,12 +430,17 @@
                                     Inactive
                                 </small>
                             @endif
+
                         </div>
+
                     @empty
-                        <span>
+
+                        <span class="subtitle">
                             No categories have been added yet.
                         </span>
+
                     @endforelse
+
                 </div>
             </div>
 
@@ -328,6 +451,7 @@
                 @csrf
 
                 <div class="form-group">
+
                     <label for="name">
                         Category Name
                     </label>
@@ -351,9 +475,11 @@
                             {{ $message }}
                         </span>
                     @enderror
+
                 </div>
 
                 <div class="form-group">
+
                     <label for="description">
                         Description
                     </label>
@@ -369,6 +495,7 @@
                             {{ $message }}
                         </span>
                     @enderror
+
                 </div>
 
                 <div class="button-row">
@@ -393,6 +520,8 @@
         </div>
 
     </main>
+
+</div>
 
 </body>
 </html>
