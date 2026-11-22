@@ -344,9 +344,6 @@
         <div class="top-section">
 
             <div>
-                <p class="eyebrow">
-                    Member directory
-                </p>
 
                 <h1>
                     Register New Member
