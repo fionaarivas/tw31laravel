@@ -361,9 +361,6 @@
         <div class="top-section">
 
             <div>
-                <p class="eyebrow">
-                    Member settings
-                </p>
 
                 <h1>
                     Add Membership Level
