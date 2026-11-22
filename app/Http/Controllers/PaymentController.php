@@ -26,32 +26,32 @@ class PaymentController extends Controller
                     'like',
                     $term
                 )
-                ->orWhere(
-                    'payment_method',
-                    'like',
-                    $term
-                )
-                ->orWhereHas(
-                    'membershipTransaction',
-                    function ($transaction) use ($term) {
-                        $transaction
-                            ->where(
-                                'transaction_number',
-                                'like',
-                                $term
-                            )
-                            ->orWhereHas(
-                                'member',
-                                function ($member) use ($term) {
-                                    $member->where(
-                                        'name',
-                                        'like',
-                                        $term
-                                    );
-                                }
-                            );
-                    }
-                );
+                    ->orWhere(
+                        'payment_method',
+                        'like',
+                        $term
+                    )
+                    ->orWhereHas(
+                        'membershipTransaction',
+                        function ($transaction) use ($term) {
+                            $transaction
+                                ->where(
+                                    'transaction_number',
+                                    'like',
+                                    $term
+                                )
+                                ->orWhereHas(
+                                    'member',
+                                    function ($member) use ($term) {
+                                        $member->where(
+                                            'name',
+                                            'like',
+                                            $term
+                                        );
+                                    }
+                                );
+                        }
+                    );
             });
         }
 
@@ -71,9 +71,9 @@ class PaymentController extends Controller
             'member',
             'membershipLevel',
         ])
-        ->where('status', 'pending')
-        ->orderByDesc('transaction_date')
-        ->get();
+            ->where('status', 'pending')
+            ->orderByDesc('transaction_date')
+            ->get();
 
         return view(
             'payments.create',
@@ -120,15 +120,22 @@ class PaymentController extends Controller
                 );
         }
 
-        if (
-            (float) $validated['amount'] >
-            (float) $transaction->amount
-        ) {
+        $paymentAmount = round(
+            (float) $validated['amount'],
+            2
+        );
+
+        $transactionAmount = round(
+            (float) $transaction->amount,
+            2
+        );
+
+        if ($paymentAmount !== $transactionAmount) {
             return back()
                 ->withInput()
                 ->with(
                     'error',
-                    'Payment amount cannot be greater than the transaction amount.'
+                    'Payment amount must exactly match the transaction amount.'
                 );
         }
 
@@ -138,7 +145,7 @@ class PaymentController extends Controller
             'payment_reference' => $paymentReference,
             'membership_transaction_id' =>
                 $validated['membership_transaction_id'],
-            'amount' => $validated['amount'],
+            'amount' => $paymentAmount,
             'payment_method' => $validated['payment_method'],
             'payment_date' => $validated['payment_date'],
             'notes' => $validated['notes'] ?? null,
@@ -205,19 +212,31 @@ class PaymentController extends Controller
 
         $transaction = $payment->membershipTransaction;
 
-        if (
-            (float) $validated['amount'] >
-            (float) $transaction->amount
-        ) {
+        $paymentAmount = round(
+            (float) $validated['amount'],
+            2
+        );
+
+        $transactionAmount = round(
+            (float) $transaction->amount,
+            2
+        );
+
+        if ($paymentAmount !== $transactionAmount) {
             return back()
                 ->withInput()
                 ->with(
                     'error',
-                    'Payment amount cannot be greater than the transaction amount.'
+                    'Payment amount must exactly match the transaction amount.'
                 );
         }
 
-        $payment->update($validated);
+        $payment->update([
+            'amount' => $paymentAmount,
+            'payment_method' => $validated['payment_method'],
+            'payment_date' => $validated['payment_date'],
+            'notes' => $validated['notes'] ?? null,
+        ]);
 
         return redirect()
             ->route('payments.index')
