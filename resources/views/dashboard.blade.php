@@ -8,12 +8,10 @@
 
     <style>
         :root {
-            --background: #17141b;
+            --background: #f7f4f8;
             --panel: #211c27;
-            --panel-light: #29232f;
-            --border: rgba(255, 255, 255, .13);
             --text: #f8f4fa;
-            --muted: #b8afbd;
+            --muted: #756a7f;
             --pink: #e984c5;
             --purple: #ad88df;
             --green: #72d69b;
@@ -30,14 +28,13 @@
             background:
                 radial-gradient(
                     circle at 86% 0%,
-                    rgba(133, 82, 145, .15),
+                    rgba(133, 82, 145, .12),
                     transparent 30%
                 ),
                 linear-gradient(
                     135deg,
-                    #17141b 0%,
-                    #3d3540 55%,
-                    #211b27 100%
+                    #ffffff 0%,
+                    #eee8f0 100%
                 );
             color: var(--text);
             font-family:
@@ -69,26 +66,29 @@
             margin: 0 auto 27px;
         }
 
-        .page-header h1 {
+        .page-title {
             margin: 0;
-            color: var(--text);
+            color: #241d2b;
             font-size: 35px;
+            font-weight: 800;
             line-height: 1.1;
             letter-spacing: -.8px;
         }
 
-        .subtitle {
+        .page-subtitle {
             margin: 9px 0 0;
-            color: var(--muted);
+            color: #756a7f;
             font-size: 14px;
         }
 
         .admin-badge {
+            flex-shrink: 0;
+            width: fit-content;
             padding: 10px 17px;
-            border: 1px solid rgba(233, 132, 197, .45);
+            border: 1px solid rgba(233, 132, 197, .65);
             border-radius: 999px;
             background: rgba(233, 132, 197, .07);
-            color: var(--pink);
+            color: #d957a5;
             font-size: 12px;
             font-weight: 800;
             white-space: nowrap;
@@ -110,13 +110,13 @@
                     #29232f 58%,
                     #362c3b 100%
                 );
-            box-shadow: 0 8px 22px rgba(0, 0, 0, .10);
+            box-shadow: 0 8px 22px rgba(45, 30, 52, .10);
         }
 
         .welcome-card::after {
             position: absolute;
-            right: -110px;
             top: -160px;
+            right: -110px;
             width: 340px;
             height: 340px;
             border-radius: 50%;
@@ -179,7 +179,7 @@
             border: 1px solid rgba(255, 255, 255, .14);
             border-radius: 18px;
             background: #211c27;
-            box-shadow: 0 7px 18px rgba(0, 0, 0, .10);
+            box-shadow: 0 7px 18px rgba(45, 30, 52, .10);
             transition: .2s ease;
         }
 
@@ -190,9 +190,9 @@
 
         .stat-card::before {
             position: absolute;
-            left: 0;
             top: 0;
             bottom: 0;
+            left: 0;
             width: 4px;
             border-radius: 18px 0 0 18px;
             background: var(--pink);
@@ -219,7 +219,7 @@
         }
 
         .stat-label {
-            color: var(--muted);
+            color: #b8afbd;
             font-size: 12px;
             font-weight: 700;
         }
@@ -281,7 +281,7 @@
             border: 1px solid rgba(255, 255, 255, .13);
             border-radius: 20px;
             background: #1c1821;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, .10);
+            box-shadow: 0 8px 22px rgba(45, 30, 52, .10);
         }
 
         .card-header {
@@ -410,7 +410,7 @@
             border: 1px dashed rgba(255, 255, 255, .18);
             border-radius: 13px;
             background: rgba(255, 255, 255, .025);
-            color: var(--muted);
+            color: #b8afbd;
             text-align: center;
         }
 
@@ -482,9 +482,11 @@
 
         <header class="page-header">
             <div>
-                <h1>Dashboard</h1>
+                <h1 class="page-title">
+                    Dashboard
+                </h1>
 
-                <p class="subtitle">
+                <p class="page-subtitle">
                     Membership Management and Transaction Processing System
                 </p>
             </div>
@@ -496,6 +498,7 @@
 
         <section class="welcome-card">
             <div class="welcome-content">
+
                 <div class="welcome-label">
                     Membership workspace
                 </div>
@@ -509,6 +512,7 @@
                     Manage member registration, membership levels,
                     transactions, and payment records in one organized system.
                 </p>
+
             </div>
         </section>
 
@@ -566,7 +570,9 @@
                 <div class="card-heading">
                     <div class="card-icon">M</div>
 
-                    <h2>Recent Members</h2>
+                    <h2>
+                        Recent Members
+                    </h2>
                 </div>
 
                 <a
