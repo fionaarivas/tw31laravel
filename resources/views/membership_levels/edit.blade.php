@@ -74,14 +74,7 @@
             margin-bottom: 28px;
         }
 
-        .eyebrow {
-            margin: 0 0 8px;
-            color: var(--pink);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 1.8px;
-            text-transform: uppercase;
-        }
+
 
         h1 {
             margin: 0;
@@ -327,9 +320,6 @@
         <div class="top-section">
 
             <div>
-                <p class="eyebrow">
-                    Member settings
-                </p>
 
                 <h1>
                     Edit Membership Level

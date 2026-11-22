@@ -178,11 +178,6 @@
             background: #3b3342;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Flash Messages
-        |--------------------------------------------------------------------------
-        */
 
         .flash-message {
             display: flex;
@@ -497,9 +492,6 @@
         <div class="topbar">
 
             <div>
-                <p class="eyebrow">
-                    Member settings
-                </p>
 
                 <h1>
                     Membership Categories
