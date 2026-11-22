@@ -9,8 +9,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TransactionController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WeatherController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,12 +19,6 @@ Route::get('/', function () {
 Route::get('/about', [PageController::class, 'about']);
 
 Route::get('/task/{id}', [PageController::class, 'task']);
-
-Route::get('/tasks', [TaskController::class, 'index'])
-    ->name('tasks.index');
-
-Route::post('/tasks', [TaskController::class, 'store'])
-    ->name('tasks.store');
 
 Route::middleware('auth')->group(function () {
 
@@ -39,8 +33,6 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
-
-  
 
     Route::resource('members', MemberController::class);
 
@@ -59,11 +51,22 @@ Route::middleware('auth')->group(function () {
         [MemberController::class, 'transactionHistory']
     )->name('members.transactions');
 
+   
 
+    Route::get('/tasks', [TaskController::class, 'index'])
+        ->name('tasks.index');
+
+    Route::post('/tasks', [TaskController::class, 'store'])
+        ->name('tasks.store');
+
+   
 
     Route::middleware('admin')->group(function () {
 
-
+        Route::delete(
+            '/tasks/{task}',
+            [TaskController::class, 'destroy']
+        )->name('tasks.destroy');
 
         Route::resource(
             'membership-categories',
@@ -80,8 +83,6 @@ Route::middleware('auth')->group(function () {
             [MembershipCategoryController::class, 'activate']
         )->name('membership-categories.activate');
 
-
-
         Route::resource(
             'membership-levels',
             MembershipLevelController::class
@@ -96,8 +97,12 @@ Route::middleware('auth')->group(function () {
             '/membership-levels/{membershipLevel}/activate',
             [MembershipLevelController::class, 'activate']
         )->name('membership-levels.activate');
-    });
 
+        Route::get(
+            '/task-dashboard',
+            [TaskController::class, 'dashboard']
+        )->name('task.dashboard');
+    });
 
 
     Route::resource(
@@ -115,44 +120,31 @@ Route::middleware('auth')->group(function () {
         [TransactionController::class, 'receipt']
     )->name('transactions.receipt');
 
-
-
+   
 
     Route::resource(
         'payments',
         PaymentController::class
     );
+
+   
+
+    Route::get(
+        '/member/dashboard',
+        [TaskController::class, 'memberDashboard']
+    )->name('member.dashboard');
+
+    Route::patch(
+        '/member/tasks/{task}/complete',
+        [TaskController::class, 'complete']
+    )->name('member.tasks.complete');
+
+   
+
+    Route::get(
+        '/weather',
+        [WeatherController::class, 'show']
+    )->name('weather.show');
 });
 
 require __DIR__ . '/auth.php';
-
-
-Route::get(
-    '/member/dashboard',
-    [TaskController::class, 'memberDashboard']
-)
-    ->middleware('auth')
-    ->name('member.dashboard');
-
-    Route::get(
-    '/task-dashboard',
-    [TaskController::class, 'dashboard']
-)
-    ->middleware('auth')
-    ->name('task.dashboard');
-
-    Route::delete(
-    '/tasks/{task}',
-    [TaskController::class, 'destroy']
-)->name('tasks.destroy');
-
-Route::patch(
-    '/member/tasks/{task}/complete',
-    [TaskController::class, 'complete']
-)->name('member.tasks.complete');
-
-
-Route::get('/weather', [
-    WeatherController::class,
-    'show',
-])->name('weather.show');
