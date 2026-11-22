@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MembershipCategorySeeder::class,
             MembershipLevelSeeder::class,
+            MemberSeeder::class,
         ]);
 
 
