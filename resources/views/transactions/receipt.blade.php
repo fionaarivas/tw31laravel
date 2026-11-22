@@ -595,8 +595,6 @@
 
     <footer class="footer">
         Thank you for using the Membership Management System.
-        <br>
-        Generated on {{ now()->format('F d, Y h:i A') }}
     </footer>
 
 </main>
