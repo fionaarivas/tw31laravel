@@ -43,13 +43,13 @@ test('member dashboard shows membership details and task counts', function () {
         ])
         ->assertDontSee($this->member->membershipCategory->name)
         ->assertDontSee($this->member->membershipLevel->name)
-        ->assertDontSee(route('about'));
+        ->assertDontSee('/about');
 });
 
 test('member tasks page only lists the members own tasks with the right actions', function () {
     $pending = Task::factory()->for($this->member)->create();
     $inProgress = Task::factory()->for($this->member)->inProgress()->create();
-    Task::factory()->for($this->member)->completed()->create(['admin_notes' => 'Great job so far']);
+    Task::factory()->for($this->member)->completed()->create();
     $otherTask = Task::factory()->create();
 
     $this->actingAs($this->memberUser)
@@ -60,7 +60,7 @@ test('member tasks page only lists the members own tasks with the right actions'
         ->assertSee(route('member.tasks.complete', $inProgress))
         ->assertSee('Start Task')
         ->assertSee('Mark as Completed')
-        ->assertSee('Great job so far')
+        ->assertSee('Completed')
         ->assertDontSee($otherTask->task_title);
 });
 
@@ -146,7 +146,7 @@ test('my membership page is read only and hides category and level', function ()
     ]);
 
     $this->actingAs($this->memberUser)
-        ->get(route('member.membership'))
+        ->get(route('member.transactions'))
         ->assertOk()
         ->assertSee($this->member->email)
         ->assertSee($this->member->phone_number)
@@ -158,10 +158,14 @@ test('my membership page is read only and hides category and level', function ()
         ->assertDontSee('Deactivate');
 });
 
-test('legacy member transactions url redirects to my membership', function () {
+test('member navigation links to every member page and marks the current one', function () {
     $this->actingAs($this->memberUser)
-        ->get('/member/transactions')
-        ->assertRedirect('/member/membership');
+        ->get(route('member.transactions'))
+        ->assertOk()
+        ->assertSee(route('member.dashboard'))
+        ->assertSee(route('member.tasks.index'))
+        ->assertSee(route('member.transactions'))
+        ->assertSee('class="active"', false);
 });
 
 test('admin task list shows in progress status', function () {

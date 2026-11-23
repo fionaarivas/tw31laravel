@@ -6,31 +6,41 @@
     <style>
         .task-grid {
             display: grid;
-            gap: 18px;
+            gap: 14px;
         }
 
         .task-card {
-            padding: 22px;
+            padding: 22px 24px;
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: var(--radius);
             background: var(--card);
+            box-shadow: var(--shadow);
         }
 
         .task-card h2 {
-            margin: 0 0 8px;
-            font-size: 19px;
+            margin: 0 0 6px;
+            font-size: 16px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
         }
 
         .task-description {
-            margin: 0 0 14px;
+            margin: 0 0 10px;
             color: var(--muted);
-            line-height: 1.6;
+            overflow-wrap: anywhere;
         }
 
         .task-date {
-            margin-bottom: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             color: var(--muted);
             font-size: 13px;
+        }
+
+        .task-date .icon {
+            width: 15px;
+            height: 15px;
         }
 
         .task-actions {
@@ -39,58 +49,108 @@
             justify-content: space-between;
             gap: 12px;
             margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
         }
 
         .task-status {
             display: inline-flex;
-            padding: 6px 11px;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
             border-radius: 999px;
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .task-status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
         }
 
         .status-pending {
-            background: rgba(240, 173, 85, .15);
+            background: var(--amber-bg);
             color: var(--amber);
         }
 
+        .status-in_progress,
         .status-in-progress {
-            background: rgba(180, 138, 255, .15);
+            background: var(--violet-bg);
             color: var(--violet);
         }
 
         .status-completed {
-            background: rgba(99, 217, 155, .15);
+            background: var(--green-bg);
             color: var(--green);
         }
 
+        .task-actions form {
+            margin: 0;
+        }
+
         .task-button {
-            padding: 9px 15px;
-            border: 0;
-            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 170px;
+            height: 40px;
+            padding: 0 18px;
+            border: 1px solid transparent;
+            border-radius: 10px;
             background: var(--pink);
-            color: #211923;
+            color: var(--on-pink);
             cursor: pointer;
-            font-size: 12px;
+            font: inherit;
+            font-size: 14px;
             font-weight: 700;
+            transition: background .15s, color .15s;
         }
 
         .task-button:hover {
-            opacity: .88;
+            background: var(--pink-hover);
         }
 
-        .empty {
-            padding: 35px;
-            border: 1px dashed var(--border);
-            border-radius: 16px;
+        .task-button.is-secondary {
+            background: transparent;
+            border-color: var(--pink);
+            color: var(--pink);
+        }
+
+        .task-button.is-secondary:hover {
+            background: var(--pink-soft);
+        }
+
+        .task-button[disabled] {
+            background: var(--grey-bg);
+            border-color: transparent;
             color: var(--muted);
-            text-align: center;
+            cursor: not-allowed;
+        }
+
+        .task-button:focus-visible {
+            outline: 2px solid var(--pink);
+            outline-offset: 2px;
+        }
+
+        .task-grid + .empty,
+        .page-header + .empty {
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--radius);
         }
 
         @media (max-width: 600px) {
             .task-actions {
-                align-items: flex-start;
+                align-items: stretch;
                 flex-direction: column;
+            }
+
+            .task-status {
+                align-self: flex-start;
             }
 
             .task-button {
@@ -108,12 +168,6 @@
             View and update the tasks assigned to you.
         </p>
     </div>
-
-    @if (session('success'))
-        <div class="notice">
-            {{ session('success') }}
-        </div>
-    @endif
 
     @if ($tasks->isEmpty())
         <div class="empty">
@@ -139,7 +193,11 @@
                     </p>
 
                     <div class="task-date">
-                        Assigned:
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="4" y="5" width="16" height="15" rx="2.5" />
+                            <path d="M4 10h16M9 3v4M15 3v4" />
+                        </svg>
+                        Assigned
                         {{ $task->created_at?->format('M d, Y') ?? '—' }}
                     </div>
 
@@ -175,15 +233,19 @@
 
                                 <button
                                     type="submit"
-                                    class="task-button"
+                                    class="task-button is-secondary"
                                 >
                                     Mark as Completed
                                 </button>
                             </form>
                         @else
-                            <span class="task-status status-completed">
+                            <button
+                                type="button"
+                                class="task-button"
+                                disabled
+                            >
                                 Completed
-                            </span>
+                            </button>
                         @endif
                     </div>
                 </article>

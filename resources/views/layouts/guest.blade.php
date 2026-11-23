@@ -21,8 +21,8 @@
         :root {
             color-scheme: dark;
 
-            --cream: #111016;
-            --paper: #1c1821;
+            --cream: #141117;
+            --paper: #1e1a23;
             --lavender: #141117;
             --lavender-2: rgba(233, 132, 197, .4);
             --pink: rgba(233, 132, 197, .12);
@@ -33,8 +33,8 @@
             --text: #f8f4fa;
             --muted: #a99faf;
             --label: #c9c1ce;
-            --border: rgba(255, 255, 255, .12);
-            --border-pink: rgba(233, 132, 197, .22);
+            --border: rgba(255, 255, 255, .1);
+            --border-pink: rgba(255, 255, 255, .07);
             --focus: rgba(233, 132, 197, .22);
             --danger: #ff7aa8;
             --danger-bg: rgba(255, 122, 168, .1);
@@ -51,10 +51,7 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background:
-                radial-gradient(circle at 8% 12%, rgba(133, 82, 145, .16), transparent 32%),
-                radial-gradient(circle at 92% 88%, rgba(233, 132, 197, .1), transparent 34%),
-                linear-gradient(180deg, #17141b 0%, var(--cream) 100%);
+            background: var(--cream);
             color: var(--text);
             font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             font-size: 15px;
@@ -79,9 +76,7 @@
             background: var(--paper);
             border: 1px solid var(--border-pink);
             border-radius: 28px;
-            box-shadow:
-                0 30px 70px rgba(0, 0, 0, .5),
-                0 0 40px rgba(233, 132, 197, .08);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 16px 40px rgba(0, 0, 0, .25);
             overflow: hidden;
         }
 
@@ -89,33 +84,9 @@
         .auth-aside {
             position: relative;
             padding: 44px 44px 36px;
-            background: linear-gradient(160deg, #241c2a 0%, #1d1822 55%, #17141b 100%);
-            box-shadow: inset -1px 0 0 var(--border);
+            background: #1a161e;
+            box-shadow: inset -1px 0 0 var(--border-pink);
             overflow: hidden;
-        }
-
-        .auth-aside::before,
-        .auth-aside::after {
-            content: "";
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .auth-aside::before {
-            width: 260px;
-            height: 260px;
-            top: -90px;
-            right: -80px;
-            background: rgba(233, 132, 197, .08);
-        }
-
-        .auth-aside::after {
-            width: 180px;
-            height: 180px;
-            bottom: -60px;
-            left: -50px;
-            background: rgba(133, 82, 145, .16);
         }
 
         .auth-aside-inner {
@@ -145,8 +116,8 @@
             display: grid;
             place-items: center;
             border-radius: 13px;
-            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-2) 100%);
-            box-shadow: 0 6px 16px rgba(233, 132, 197, .3);
+            background: var(--purple);
+            color: #241722;
         }
 
         .auth-brand small {
@@ -454,20 +425,18 @@
             padding: 0 22px;
             border: 0;
             border-radius: 14px;
-            background: linear-gradient(135deg, #d65fae 0%, var(--purple-2) 100%);
-            color: #fff;
+            background: var(--purple);
+            color: #241722;
             font: inherit;
             font-size: 15.5px;
             font-weight: 800;
             letter-spacing: .2px;
             cursor: pointer;
-            box-shadow: 0 10px 22px rgba(233, 132, 197, .22);
-            transition: filter .15s, transform .05s, box-shadow .15s;
+            transition: background .15s, transform .05s, box-shadow .15s;
         }
 
         .auth-btn:hover {
-            filter: brightness(1.05);
-            box-shadow: 0 12px 26px rgba(233, 132, 197, .3);
+            background: #f09ad1;
         }
 
         .auth-btn:active {
@@ -476,7 +445,7 @@
 
         .auth-btn:focus-visible {
             outline: none;
-            box-shadow: 0 0 0 4px var(--focus), 0 10px 22px rgba(233, 132, 197, .22);
+            box-shadow: 0 0 0 4px var(--focus);
         }
 
         .auth-switch {
@@ -577,8 +546,8 @@
                     <a href="{{ route('login') }}" class="auth-brand">
                         <span class="auth-brand-mark" aria-hidden="true">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <circle cx="9" cy="12" r="5.5" stroke="#fff" stroke-width="2.2" />
-                                <circle cx="15" cy="12" r="5.5" stroke="#fff" stroke-width="2.2" opacity=".75" />
+                                <circle cx="9" cy="12" r="5.5" stroke="currentColor" stroke-width="2.2" />
+                                <circle cx="15" cy="12" r="5.5" stroke="currentColor" stroke-width="2.2" opacity=".7" />
                             </svg>
                         </span>
                         <span>

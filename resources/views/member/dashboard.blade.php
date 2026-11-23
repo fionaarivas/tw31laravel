@@ -9,28 +9,26 @@
             align-items: center;
             gap: 14px;
             margin-bottom: 24px;
-            padding: 16px 20px;
-            border: 1px solid rgba(99, 217, 155, 0.4);
+            padding: 14px 18px;
             border-radius: 12px;
-            background: rgba(45, 117, 82, 0.2);
-            color: #ffffff;
+            background: var(--green-bg);
+            color: var(--text);
         }
 
         .verification-icon {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex: none;
             width: 34px;
             height: 34px;
             border-radius: 50%;
-            background: #63d99b;
-            color: #172019;
-            font-size: 19px;
-            font-weight: 800;
+            background: rgba(127, 212, 163, .16);
+            color: var(--green);
         }
 
         .verification-card strong {
-            color: #63d99b;
+            color: var(--green);
             font-size: 14px;
         }
 
@@ -72,8 +70,8 @@
 
         .stat-value {
             margin-top: 6px;
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: 800;
             line-height: 1.1;
         }
 
@@ -147,8 +145,10 @@
 
     @if (session('email_verified'))
         <div class="verification-card">
-            <div class="verification-icon">
-                ✓
+            <div class="verification-icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M6 12.5l4 4 8-9" />
+                </svg>
             </div>
 
             <div>
