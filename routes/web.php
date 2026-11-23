@@ -115,40 +115,32 @@ Route::patch(
         Route::resource('payments', PaymentController::class);
     });
 
-    Route::get(
-        '/member/dashboard',
-        [TaskController::class, 'memberDashboard']
-    )->name('member.dashboard');
+        Route::middleware('verified')->group(function () {
+        Route::get(
+            '/member/dashboard',
+            [TaskController::class, 'memberDashboard']
+        )->name('member.dashboard');
 
-    Route::get(
-        '/member/membership',
-        [MemberController::class, 'memberTransactionHistory']
-    )->name('member.membership');
+        Route::get(
+            '/member/transactions',
+            [MemberController::class, 'memberTransactionHistory']
+        )->name('member.transactions');
 
-    Route::redirect(
-        '/member/transactions',
-        '/member/membership'
-    )->name('member.transactions');
+        Route::patch(
+            '/member/tasks/{task}/start',
+            [TaskController::class, 'start']
+        )->name('member.tasks.start');
 
-    Route::get(
-        '/member/tasks',
-        [TaskController::class, 'memberTasks']
-    )->name('member.tasks.index');
+        Route::patch(
+            '/member/tasks/{task}/complete',
+            [TaskController::class, 'complete']
+        )->name('member.tasks.complete');
 
-    Route::patch(
-        '/member/tasks/{task}/start',
-        [TaskController::class, 'start']
-    )->name('member.tasks.start');
+        Route::get(
+            '/weather',
+            [WeatherController::class, 'show']
+        )->name('weather.show');
+    });
 
-    Route::patch(
-        '/member/tasks/{task}/complete',
-        [TaskController::class, 'complete']
-    )->name('member.tasks.complete');
-
-    Route::get(
-        '/weather',
-        [WeatherController::class, 'show']
-    )->name('weather.show');
-});
-
+    });
 require __DIR__ . '/auth.php';

@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class RegisteredUserController extends Controller
 {
@@ -145,12 +146,14 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return redirect()
-            ->route('login')
-            ->with(
-                'status',
-                'Membership application submitted. Please wait for admin approval.'
-            );
+Auth::login($user);
+
+return redirect()
+    ->route('verification.notice')
+    ->with(
+        'status',
+        'Membership application submitted. Please verify your email address.'
+    );
     }
 
     private function generateMembershipNumber(): string
