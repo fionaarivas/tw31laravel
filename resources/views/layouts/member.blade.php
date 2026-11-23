@@ -484,9 +484,13 @@
                 >Tasks</a>
 
                 <a
-                    href="{{ route('member.membership') }}"
-                    @class(['active' => request()->routeIs('member.membership')])
-                >My Membership</a>
+    href="{{ route('member.transactions') }}"
+    @class([
+        'active' => request()->routeIs('member.transactions')
+    ])
+>
+    My Membership
+</a>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

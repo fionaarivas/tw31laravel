@@ -4,6 +4,42 @@
 
 @push('styles')
     <style>
+        .verification-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            border: 1px solid rgba(99, 217, 155, 0.4);
+            border-radius: 12px;
+            background: rgba(45, 117, 82, 0.2);
+            color: #ffffff;
+        }
+
+        .verification-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #63d99b;
+            color: #172019;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .verification-card strong {
+            color: #63d99b;
+            font-size: 14px;
+        }
+
+        .verification-card p {
+            margin: 3px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -79,6 +115,10 @@
         }
 
         @media (max-width: 720px) {
+            .verification-card {
+                align-items: flex-start;
+            }
+
             .stats {
                 grid-template-columns: 1fr;
             }
@@ -104,48 +144,116 @@
 @endpush
 
 @section('content')
+
+    @if (session('email_verified'))
+        <div class="verification-card">
+            <div class="verification-icon">
+                ✓
+            </div>
+
+            <div>
+                <strong>
+                    Email Verified Successfully
+                </strong>
+
+                <p>
+                    {{ session('email_verified') }}
+                </p>
+            </div>
+        </div>
+    @endif
+
     <div class="page-header">
-        <h1>Welcome back, {{ $member->name }}</h1>
-        <p>Here is an overview of your membership and tasks.</p>
+        <h1>
+            Welcome back, {{ $member->name }}
+        </h1>
+
+        <p>
+            Here is an overview of your membership and tasks.
+        </p>
     </div>
 
     <section class="section" style="margin-top: 0;">
         <div class="section-head">
-            <h2>Membership</h2>
-            <a href="{{ route('member.membership') }}">View details</a>
+            <h2>
+                Membership
+            </h2>
+
+           <a href="{{ route('member.transactions') }}">
+    View details
+</a>
         </div>
 
         <div class="card">
             <dl class="details">
                 <div>
-                    <dt>Member Name</dt>
-                    <dd>{{ $member->name }}</dd>
+                    <dt>
+                        Member Name
+                    </dt>
+
+                    <dd>
+                        {{ $member->name }}
+                    </dd>
                 </div>
 
                 <div>
-                    <dt>Membership No.</dt>
-                    <dd>{{ $member->membership_number }}</dd>
+                    <dt>
+                        Membership No.
+                    </dt>
+
+                    <dd>
+                        {{ $member->membership_number }}
+                    </dd>
                 </div>
 
                 <div>
-                    <dt>Status</dt>
-                    <dd>@include('member.partials.membership-status', ['status' => $member->status])</dd>
+                    <dt>
+                        Status
+                    </dt>
+
+                    <dd>
+                        @include(
+                            'member.partials.membership-status',
+                            ['status' => $member->status]
+                        )
+                    </dd>
                 </div>
 
                 <div>
-                    <dt>Start Date</dt>
-                    <dd>{{ $currentMembership?->membership_start_date?->format('M d, Y') ?? '—' }}</dd>
+                    <dt>
+                        Start Date
+                    </dt>
+
+                    <dd>
+                        {{
+                            $currentMembership
+                                ?->membership_start_date
+                                ?->format('M d, Y')
+                            ?? '—'
+                        }}
+                    </dd>
                 </div>
 
                 <div>
-                    <dt>End Date</dt>
-                    <dd>{{ $currentMembership?->membership_end_date?->format('M d, Y') ?? '—' }}</dd>
+                    <dt>
+                        End Date
+                    </dt>
+
+                    <dd>
+                        {{
+                            $currentMembership
+                                ?->membership_end_date
+                                ?->format('M d, Y')
+                            ?? '—'
+                        }}
+                    </dd>
                 </div>
             </dl>
 
             @if (strtolower($member->status ?? '') === 'pending')
                 <div class="notice">
-                    Your membership application is awaiting admin approval. Start and end dates will appear once it is approved.
+                    Your membership application is awaiting admin approval.
+                    Start and end dates will appear once it is approved.
                 </div>
             @endif
         </div>
@@ -153,59 +261,99 @@
 
     <section class="section">
         <div class="section-head">
-            <h2>Task Summary</h2>
-            <a href="{{ route('member.tasks.index') }}">View all tasks</a>
+            <h2>
+                Task Summary
+            </h2>
+
+            <a href="{{ route('member.tasks.index') }}">
+    View all tasks
+</a>
         </div>
 
         <div class="card stats">
             <div class="stat">
                 <div class="stat-label">
-                    <span class="stat-dot" style="background: var(--amber);"></span>
+                    <span
+                        class="stat-dot"
+                        style="background: var(--amber);"
+                    ></span>
+
                     Pending
                 </div>
-                <div class="stat-value">{{ $taskCounts['pending'] }}</div>
+
+                <div class="stat-value">
+                    {{ $taskCounts['pending'] }}
+                </div>
             </div>
 
             <div class="stat">
                 <div class="stat-label">
-                    <span class="stat-dot" style="background: var(--violet);"></span>
+                    <span
+                        class="stat-dot"
+                        style="background: var(--violet);"
+                    ></span>
+
                     In Progress
                 </div>
-                <div class="stat-value">{{ $taskCounts['in_progress'] }}</div>
+
+                <div class="stat-value">
+                    {{ $taskCounts['in_progress'] }}
+                </div>
             </div>
 
             <div class="stat">
                 <div class="stat-label">
-                    <span class="stat-dot" style="background: var(--green);"></span>
+                    <span
+                        class="stat-dot"
+                        style="background: var(--green);"
+                    ></span>
+
                     Completed
                 </div>
-                <div class="stat-value">{{ $taskCounts['completed'] }}</div>
+
+                <div class="stat-value">
+                    {{ $taskCounts['completed'] }}
+                </div>
             </div>
         </div>
     </section>
 
     <section class="section">
         <div class="section-head">
-            <h2>Recent Tasks</h2>
+            <h2>
+                Recent Tasks
+            </h2>
         </div>
 
         <div class="card">
             @if ($tasks->isEmpty())
-                <div class="empty">You have no assigned tasks yet.</div>
+                <div class="empty">
+                    You have no assigned tasks yet.
+                </div>
             @else
                 <ul class="task-list">
                     @foreach ($tasks->take(5) as $task)
                         <li>
                             <div>
-                                <div class="title">{{ $task->task_title }}</div>
-                                <div class="date">Assigned {{ $task->created_at?->format('M d, Y') }}</div>
+                                <div class="title">
+                                    {{ $task->task_title }}
+                                </div>
+
+                                <div class="date">
+                                    Assigned
+                                    {{ $task->created_at?->format('M d, Y') }}
+                                </div>
                             </div>
 
-                            @include('member.partials.task-status', ['task' => $task])
+                            @include(
+                                'member.partials.task-status',
+                                ['task' => $task]
+                            )
                         </li>
                     @endforeach
                 </ul>
             @endif
         </div>
     </section>
+
 @endsection

@@ -17,29 +17,51 @@ Route::get('/', function () {
 });
 
 Route::get(
-    '/about',
-    [PageController::class, 'about']
-)->name('about');
-
-Route::get('/task/{id}', [PageController::class, 'task']);
+    '/task/{id}',
+    [PageController::class, 'task']
+);
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/profile', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
+    /*
+    |--------------------------------------------------------------------------
+    | Profile Routes
+    |--------------------------------------------------------------------------
+    */
 
-    Route::patch('/profile', [ProfileController::class, 'update'])
-        ->name('profile.update');
+    Route::get(
+        '/profile',
+        [ProfileController::class, 'edit']
+    )->name('profile.edit');
 
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
+    Route::patch(
+        '/profile',
+        [ProfileController::class, 'update']
+    )->name('profile.update');
+
+    Route::delete(
+        '/profile',
+        [ProfileController::class, 'destroy']
+    )->name('profile.destroy');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Routes
+    |--------------------------------------------------------------------------
+    */
 
     Route::middleware('admin')->group(function () {
 
-        Route::get('/dashboard', [DashboardController::class, 'index'])
-            ->name('dashboard');
+        Route::get(
+            '/dashboard',
+            [DashboardController::class, 'index']
+        )->name('dashboard');
 
-        Route::resource('members', MemberController::class);
+        Route::resource(
+            'members',
+            MemberController::class
+        );
 
         Route::patch(
             '/members/{member}/deactivate',
@@ -56,51 +78,88 @@ Route::middleware('auth')->group(function () {
             [MemberController::class, 'transactionHistory']
         )->name('members.transactions');
 
-        Route::get('/tasks', [TaskController::class, 'index'])
-            ->name('tasks.index');
 
-        Route::post('/tasks', [TaskController::class, 'store'])
-            ->name('tasks.store');
+        /*
+        |--------------------------------------------------------------------------
+        | Admin Task Routes
+        |--------------------------------------------------------------------------
+        */
 
-        Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])
-            ->name('tasks.destroy');
+        Route::get(
+            '/tasks',
+            [TaskController::class, 'index']
+        )->name('tasks.index');
 
-       Route::resource(
-    'membership-categories',
-    MembershipCategoryController::class
-);
+        Route::post(
+            '/tasks',
+            [TaskController::class, 'store']
+        )->name('tasks.store');
 
-Route::patch(
-    '/membership-categories/{membershipCategory}/deactivate',
-    [MembershipCategoryController::class, 'deactivate']
-)->name('membership-categories.deactivate');
-
-Route::patch(
-    '/membership-categories/{membershipCategory}/activate',
-    [MembershipCategoryController::class, 'activate']
-)->name('membership-categories.activate');
-
-       Route::resource(
-    'membership-levels',
-    MembershipLevelController::class
-);
-
-Route::patch(
-    '/membership-levels/{membershipLevel}/deactivate',
-    [MembershipLevelController::class, 'deactivate']
-)->name('membership-levels.deactivate');
-
-Route::patch(
-    '/membership-levels/{membershipLevel}/activate',
-    [MembershipLevelController::class, 'activate']
-)->name('membership-levels.activate');
+        Route::delete(
+            '/tasks/{task}',
+            [TaskController::class, 'destroy']
+        )->name('tasks.destroy');
 
         Route::get(
             '/task-dashboard',
             [TaskController::class, 'dashboard']
         )->name('task.dashboard');
 
-        Route::resource('transactions', TransactionController::class);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Membership Category Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource(
+            'membership-categories',
+            MembershipCategoryController::class
+        );
+
+        Route::patch(
+            '/membership-categories/{membershipCategory}/deactivate',
+            [MembershipCategoryController::class, 'deactivate']
+        )->name('membership-categories.deactivate');
+
+        Route::patch(
+            '/membership-categories/{membershipCategory}/activate',
+            [MembershipCategoryController::class, 'activate']
+        )->name('membership-categories.activate');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Membership Level Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource(
+            'membership-levels',
+            MembershipLevelController::class
+        );
+
+        Route::patch(
+            '/membership-levels/{membershipLevel}/deactivate',
+            [MembershipLevelController::class, 'deactivate']
+        )->name('membership-levels.deactivate');
+
+        Route::patch(
+            '/membership-levels/{membershipLevel}/activate',
+            [MembershipLevelController::class, 'activate']
+        )->name('membership-levels.activate');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin Transaction Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource(
+            'transactions',
+            TransactionController::class
+        );
 
         Route::patch(
             '/transactions/{transaction}/approve',
@@ -112,14 +171,37 @@ Route::patch(
             [TransactionController::class, 'receipt']
         )->name('transactions.receipt');
 
-        Route::resource('payments', PaymentController::class);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin Payment Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource(
+            'payments',
+            PaymentController::class
+        );
     });
 
-        Route::middleware('verified')->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Verified Member Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware('verified')->group(function () {
+
         Route::get(
             '/member/dashboard',
             [TaskController::class, 'memberDashboard']
         )->name('member.dashboard');
+
+        Route::get(
+            '/member/tasks',
+            [TaskController::class, 'memberTasks']
+        )->name('member.tasks.index');
 
         Route::get(
             '/member/transactions',
@@ -141,6 +223,6 @@ Route::patch(
             [WeatherController::class, 'show']
         )->name('weather.show');
     });
+});
 
-    });
 require __DIR__ . '/auth.php';

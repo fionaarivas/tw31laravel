@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Membership Levels</title>
+    <title>Membership Levels & Fees</title>
 
     <style>
         :root {
@@ -501,7 +501,7 @@
         <div class="topbar">
 
             <div>
-                <h1>Membership Levels</h1>
+                <h1>Membership Levels & Fees</h1>
 
                 <p>
                     Manage membership packages, fees, and benefits.

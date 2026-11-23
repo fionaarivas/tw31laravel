@@ -13,7 +13,7 @@ class PageController extends Controller
     {
         $data = [
             'id' => $id,
-            'title' => 'IT0049 - Section TW31',
+            'title' => 'Membership Management System',
         ];
 
         return view('task', $data);

@@ -288,7 +288,7 @@
                     : ''
             }}"
         >
-            Membership Levels
+            Membership Levels & Fees
         </a>
 
         <div class="menu-title">

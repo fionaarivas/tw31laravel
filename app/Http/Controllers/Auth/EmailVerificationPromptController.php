@@ -9,13 +9,19 @@ use Illuminate\View\View;
 
 class EmailVerificationPromptController extends Controller
 {
-    /**
-     * Display the email verification prompt.
-     */
-    public function __invoke(Request $request): RedirectResponse|View
-    {
-        return $request->user()->hasVerifiedEmail()
-                    ? redirect()->intended(route('dashboard', absolute: false))
-                    : view('auth.verify-email');
+    public function __invoke(
+        Request $request
+    ): View|RedirectResponse {
+        $user = $request->user();
+
+        if ($user->hasVerifiedEmail()) {
+            if ($user->role === 'admin') {
+                return redirect()->route('dashboard');
+            }
+
+            return redirect()->route('member.dashboard');
+        }
+
+        return view('auth.verify-email');
     }
 }

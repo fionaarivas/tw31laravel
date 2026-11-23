@@ -1,74 +1,100 @@
 @extends('layouts.member')
 
-@section('title', 'Tasks')
+@section('title', 'My Tasks')
 
 @push('styles')
     <style>
-        .tasks {
+        .task-grid {
             display: grid;
-            gap: 14px;
+            gap: 18px;
         }
 
-        .task {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 18px 24px;
-            align-items: start;
+        .task-card {
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--card);
         }
 
-        .task-head {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 4px;
+        .task-card h2 {
+            margin: 0 0 8px;
+            font-size: 19px;
         }
 
-        .task-head h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-            overflow-wrap: anywhere;
+        .task-description {
+            margin: 0 0 14px;
+            color: var(--muted);
+            line-height: 1.6;
         }
 
-        .task-meta {
-            margin-bottom: 10px;
+        .task-date {
+            margin-bottom: 16px;
             color: var(--muted);
             font-size: 13px;
         }
 
-        .task-desc {
-            margin: 0;
-            color: #e6dde9;
-            white-space: pre-line;
-            overflow-wrap: anywhere;
+        .task-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
         }
 
-        .task-notes {
-            margin-top: 14px;
-            padding: 10px 14px;
-            border-left: 3px solid var(--purple);
-            border-radius: 0 10px 10px 0;
-            background: var(--surface-2);
-            font-size: 14px;
-        }
-
-        .task-notes strong {
-            display: block;
-            margin-bottom: 2px;
-            color: var(--muted);
+        .task-status {
+            display: inline-flex;
+            padding: 6px 11px;
+            border-radius: 999px;
             font-size: 12px;
-            letter-spacing: .5px;
-            text-transform: uppercase;
+            font-weight: 700;
         }
 
-        .task-action form {
-            margin: 0;
+        .status-pending {
+            background: rgba(240, 173, 85, .15);
+            color: var(--amber);
         }
 
-        @media (max-width: 720px) {
-            .task {
-                grid-template-columns: 1fr;
+        .status-in-progress {
+            background: rgba(180, 138, 255, .15);
+            color: var(--violet);
+        }
+
+        .status-completed {
+            background: rgba(99, 217, 155, .15);
+            color: var(--green);
+        }
+
+        .task-button {
+            padding: 9px 15px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--pink);
+            color: #211923;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .task-button:hover {
+            opacity: .88;
+        }
+
+        .empty {
+            padding: 35px;
+            border: 1px dashed var(--border);
+            border-radius: 16px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .task-actions {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .task-button {
+                width: 100%;
             }
         }
     </style>
@@ -77,50 +103,87 @@
 @section('content')
     <div class="page-header">
         <h1>My Tasks</h1>
-        <p>Tasks assigned to you by the admin. Start a task when you begin working on it, then mark it as completed.</p>
+
+        <p>
+            View and update the tasks assigned to you.
+        </p>
     </div>
 
+    @if (session('success'))
+        <div class="notice">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @if ($tasks->isEmpty())
-        <div class="card empty">You have no assigned tasks yet.</div>
+        <div class="empty">
+            You have no assigned tasks yet.
+        </div>
     @else
-        <div class="tasks">
+        <div class="task-grid">
             @foreach ($tasks as $task)
-                <article class="card task">
-                    <div>
-                        <div class="task-head">
-                            <h3>{{ $task->task_title }}</h3>
-                            @include('member.partials.task-status', ['task' => $task])
-                        </div>
+                @php
+                    $status = $task->status
+                        ?? ($task->completed
+                            ? 'completed'
+                            : 'pending');
+                @endphp
 
-                        <div class="task-meta">
-                            Assigned {{ $task->created_at?->format('M d, Y') }}
-                        </div>
+                <article class="task-card">
+                    <h2>
+                        {{ $task->task_title }}
+                    </h2>
 
-                        <p class="task-desc">{{ $task->description ?: 'No description provided.' }}</p>
+                    <p class="task-description">
+                        {{ $task->description ?: 'No description provided.' }}
+                    </p>
 
-                        @if (filled($task->admin_notes))
-                            <div class="task-notes">
-                                <strong>Admin Notes</strong>
-                                {{ $task->admin_notes }}
-                            </div>
-                        @endif
+                    <div class="task-date">
+                        Assigned:
+                        {{ $task->created_at?->format('M d, Y') ?? '—' }}
                     </div>
 
-                    <div class="task-action">
-                        @if ($task->isPending())
-                            <form method="POST" action="{{ route('member.tasks.start', $task) }}">
+                    <div class="task-actions">
+                        <span
+                            class="task-status status-{{ $status }}"
+                        >
+                            {{ ucwords(str_replace('_', ' ', $status)) }}
+                        </span>
+
+                        @if ($status === 'pending')
+                            <form
+                                method="POST"
+                                action="{{ route('member.tasks.start', $task) }}"
+                            >
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn btn-primary">Start Task</button>
+
+                                <button
+                                    type="submit"
+                                    class="task-button"
+                                >
+                                    Start Task
+                                </button>
                             </form>
-                        @elseif ($task->isInProgress())
-                            <form method="POST" action="{{ route('member.tasks.complete', $task) }}">
+                        @elseif ($status === 'in_progress')
+                            <form
+                                method="POST"
+                                action="{{ route('member.tasks.complete', $task) }}"
+                            >
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn btn-success">Mark as Completed</button>
+
+                                <button
+                                    type="submit"
+                                    class="task-button"
+                                >
+                                    Mark as Completed
+                                </button>
                             </form>
                         @else
-                            <button type="button" class="btn" disabled>Completed</button>
+                            <span class="task-status status-completed">
+                                Completed
+                            </span>
                         @endif
                     </div>
                 </article>

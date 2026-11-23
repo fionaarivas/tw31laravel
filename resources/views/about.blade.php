@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   
-    <title>About Page of TW31</title>
+    <title>Membership Management System</title>
 </head>
 <body>
     <h1> {{ $course}}</h1>
