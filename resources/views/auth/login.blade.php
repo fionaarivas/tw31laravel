@@ -1,6 +1,6 @@
 <x-guest-layout class="is-narrow">
 
-    <x-slot name="title">Sign In · Membership Management System</x-slot>
+    <x-slot name="title">Login In · Membership Management System</x-slot>
 
     <x-slot name="aside">
         <span class="aside-eyebrow">Member Portal</span>
@@ -8,7 +8,7 @@
         <h2>Welcome back! We're glad to see you.</h2>
 
         <p>
-            Sign in to your member portal to check your membership status,
+            Login in to your member portal to check your membership status,
             keep track of your assigned tasks, and review your transactions
             and payments.
         </p>
@@ -21,7 +21,7 @@
     </x-slot>
 
     <div class="auth-heading">
-        <h1>Sign in</h1>
+        <h1>Login</h1>
         <p>Enter your email and password to access your account.</p>
     </div>
 

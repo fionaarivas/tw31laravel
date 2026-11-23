@@ -33,8 +33,8 @@
             --text: #f8f4fa;
             --muted: #a99faf;
             --label: #c9c1ce;
-            --border: rgba(255, 255, 255, .1);
-            --border-pink: rgba(255, 255, 255, .07);
+            --border: rgba(152, 103, 134, 0.1);
+            --border-pink: rgba(181, 111, 159, 0.63);
             --focus: rgba(233, 132, 197, .22);
             --danger: #ff7aa8;
             --danger-bg: rgba(255, 122, 168, .1);
@@ -51,7 +51,7 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background: var(--cream);
+            background:--cream: #2B2530;
             color: var(--text);
             font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             font-size: 15px;
@@ -426,7 +426,7 @@
             border: 0;
             border-radius: 14px;
             background: var(--purple);
-            color: #241722;
+            color: #24171c;
             font: inherit;
             font-size: 15.5px;
             font-weight: 800;
@@ -464,7 +464,7 @@
             border-color: var(--border);
             border-radius: 12px;
             min-height: 46px;
-            background-color: #141117;
+            background-color: #171115;
             color: var(--text);
         }
 
