@@ -33,8 +33,9 @@
                 ),
                 linear-gradient(
                     135deg,
-                    #ffffff 0%,
-                    #eee8f0 100%
+                    #313131 0%,
+                    #584b54 52%,
+                    #18131d 100%
                 );
             color: var(--text);
             font-family:
@@ -68,7 +69,7 @@
 
         .page-title {
             margin: 0;
-            color: #241d2b;
+            color: #ffffff;
             font-size: 35px;
             font-weight: 800;
             line-height: 1.1;
@@ -77,7 +78,7 @@
 
         .page-subtitle {
             margin: 9px 0 0;
-            color: #756a7f;
+            color: #ffffff;
             font-size: 14px;
         }
 

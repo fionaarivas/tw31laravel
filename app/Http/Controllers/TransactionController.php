@@ -8,6 +8,8 @@ use App\Models\MembershipTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Notifications\MembershipApprovedNotification;
+use Illuminate\Support\Facades\Notification;
 
 
 class TransactionController extends Controller
@@ -247,8 +249,9 @@ class TransactionController extends Controller
         return $number;
     }
 
-    public function approve(MembershipTransaction $transaction)
-{
+ public function approve(
+    MembershipTransaction $transaction
+) {
     if ($transaction->status !== 'paid') {
         return redirect()
             ->back()
@@ -258,15 +261,19 @@ class TransactionController extends Controller
             );
     }
 
-    $transaction->load('membershipLevel');
+    $transaction->load([
+        'membershipLevel',
+        'member',
+    ]);
 
     $startDate = Carbon::today();
 
     if ($transaction->transaction_type === 'renewal') {
-        $previousTransaction = MembershipTransaction::where(
-            'member_id',
-            $transaction->member_id
-        )
+        $previousTransaction =
+            MembershipTransaction::where(
+                'member_id',
+                $transaction->member_id
+            )
             ->where('status', 'approved')
             ->whereNotNull('membership_end_date')
             ->latest('membership_end_date')
@@ -285,7 +292,8 @@ class TransactionController extends Controller
     }
 
     $endDate = $startDate->copy()->addMonths(
-        $transaction->membershipLevel->validity_period_months
+        $transaction->membershipLevel
+            ->validity_period_months
     );
 
     $transaction->update([
@@ -294,11 +302,26 @@ class TransactionController extends Controller
         'membership_end_date' => $endDate,
     ]);
 
+    $transaction->member->update([
+        'status' => 'active',
+        'membership_level_id' =>
+            $transaction->membership_level_id,
+    ]);
+
+    Notification::route(
+        'mail',
+        $transaction->member->email
+    )->notify(
+        new MembershipApprovedNotification(
+            $transaction->fresh()
+        )
+    );
+
     return redirect()
         ->route('transactions.show', $transaction)
         ->with(
             'success',
-            'Transaction approved and membership dates generated successfully.'
+            'Transaction approved and membership activated successfully.'
         );
 }
 

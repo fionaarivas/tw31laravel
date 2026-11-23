@@ -1,548 +1,211 @@
-@php
-    $totalTasks = $tasks->count();
-    $completedTasks = $tasks->where('completed', true)->count();
-    $pendingTasks = $tasks->where('completed', false)->count();
+@extends('layouts.member')
 
-    $progress = $totalTasks > 0
-        ? round(($completedTasks / $totalTasks) * 100)
-        : 0;
-@endphp
+@section('title', 'Dashboard')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Member Dashboard</title>
-
+@push('styles')
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        :root {
-            --green: #123f38;
-            --dark-green: #063d3b;
-            --pink: #e875a8;
-            --soft-pink: #fce3ef;
-            --text: #193b35;
-            --muted: #66807b;
-            --border: #dce9df;
-            --bg: #f7faf9;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: var(--bg);
-            color: var(--text);
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
-        }
-
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 22px 8%;
-            background: var(--green);
-        }
-
-        .logo {
-            color: white;
-            font-size: 27px;
-            font-weight: 700;
-        }
-
-        .logo span {
-            color: var(--pink);
-        }
-
-        .logout-button {
-            padding: 11px 22px;
-            border: none;
-            border-radius: 9px;
-            background: var(--pink);
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        .logout-button:hover {
-            background: #d95f94;
-            transform: translateY(-2px);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1050px;
-            margin: 42px auto 70px;
-        }
-
-        .success-message {
-            margin-bottom: 22px;
-            padding: 14px 18px;
-            border: 1px solid #b8dfc2;
-            border-radius: 10px;
-            background: #e2f5e6;
-            color: #28733f;
-            transition: .5s ease;
-        }
-
-        .success-message.hide {
-            opacity: 0;
-            transform: translateY(-8px);
-        }
-
-        .hero {
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 25px;
-            padding: 38px 42px;
-            border-radius: 22px;
-            background: linear-gradient(
-                135deg,
-                #123f38,
-                #216b5e
-            );
-            color: white;
-            box-shadow: 0 12px 30px rgba(18, 63, 56, .18);
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            width: 230px;
-            height: 230px;
-            right: -70px;
-            top: -100px;
-            border-radius: 50%;
-            background: rgba(232, 117, 168, .25);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            margin: 0 0 12px;
-            font-size: 36px;
-        }
-
-        .hero p {
-            margin: 8px 0;
-            color: #dceee8;
-            font-size: 16px;
-        }
-
-        .membership-number {
-            color: #ffd1e4;
-            font-weight: 700;
-        }
-
-        .stats-grid {
+        .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 25px;
+            padding: 0;
+            overflow: hidden;
         }
 
-        .stat-card {
-            padding: 22px;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            background: white;
-            box-shadow: 0 8px 20px rgba(25, 59, 53, .05);
+        .stat {
+            padding: 20px 24px;
+        }
+
+        .stat + .stat {
+            border-left: 1px solid var(--border);
         }
 
         .stat-label {
-            color: var(--muted);
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .stat-number {
-            margin-top: 8px;
-            color: var(--dark-green);
-            font-size: 30px;
-            font-weight: 800;
-        }
-
-        .stat-card:nth-child(2) .stat-number {
-            color: #b36a1d;
-        }
-
-        .stat-card:nth-child(3) .stat-number {
-            color: #337a4b;
-        }
-
-        .tasks-card {
-            padding: 32px 40px 38px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            background: white;
-            box-shadow: 0 10px 28px rgba(25, 59, 53, .06);
-        }
-
-        .tasks-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 18px;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 500;
         }
 
-        .tasks-header h2 {
+        .stat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .stat-value {
+            margin-top: 6px;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .task-list {
+            list-style: none;
             margin: 0;
-            color: var(--dark-green);
-            font-size: 27px;
+            padding: 0;
         }
 
-        .task-count {
-            padding: 8px 14px;
-            border-radius: 20px;
-            background: var(--soft-pink);
-            color: #c84d86;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .progress-wrapper {
-            margin-bottom: 24px;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 7px;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .progress-bar {
-            height: 9px;
-            overflow: hidden;
-            border-radius: 20px;
-            background: #edf3ef;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: {{ $progress }}%;
-            border-radius: 20px;
-            background: linear-gradient(
-                90deg,
-                #e875a8,
-                #337a4b
-            );
-        }
-
-        .task-item {
+        .task-list li {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 24px;
-            margin-bottom: 15px;
-            padding: 23px;
-            border: 1px solid #e0ebe5;
-            border-radius: 15px;
-            background: #f9fcfa;
-            transition: .2s;
+            gap: 16px;
+            padding: 14px 0;
         }
 
-        .task-item:hover {
-            border-color: #bcd6c7;
-            box-shadow: 0 7px 18px rgba(25, 59, 53, .08);
-            transform: translateY(-2px);
+        .task-list li + li {
+            border-top: 1px solid var(--border);
         }
 
-        .task-details {
-            flex: 1;
+        .task-list .title {
+            font-weight: 500;
+            overflow-wrap: anywhere;
         }
 
-        .task-title {
-            margin: 0 0 8px;
-            color: var(--dark-green);
-            font-size: 19px;
-        }
-
-        .task-description {
-            margin: 0 0 13px;
+        .task-list .date {
             color: var(--muted);
-            line-height: 1.6;
+            font-size: 13px;
         }
 
-        .task-status {
-            display: inline-block;
-            padding: 7px 13px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
+        .notice {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: var(--amber-bg);
+            color: var(--amber);
+            font-size: 14px;
         }
 
-        .status-pending {
-            background: #fff0d5;
-            color: #a8631b;
-        }
-
-        .status-completed {
-            background: #dff3e5;
-            color: #337a4b;
-        }
-
-        .complete-button {
-            padding: 11px 17px;
-            border: none;
-            border-radius: 9px;
-            background: #337a4b;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: .2s;
-        }
-
-        .complete-button:hover {
-            background: #28633c;
-            transform: translateY(-2px);
-        }
-
-        .empty-state {
-            padding: 35px;
-            border: 1px dashed #cbded1;
-            border-radius: 14px;
-            background: #f7fbf8;
-            color: var(--muted);
-            text-align: center;
-        }
-
-        @media (max-width: 700px) {
-            .topbar {
-                padding: 20px;
-            }
-
-            .logo {
-                font-size: 23px;
-            }
-
-            .container {
-                width: 94%;
-                margin-top: 28px;
-            }
-
-            .hero {
-                padding: 30px 25px;
-            }
-
-            .hero h1 {
-                font-size: 29px;
-            }
-
-            .stats-grid {
+        @media (max-width: 720px) {
+            .stats {
                 grid-template-columns: 1fr;
             }
 
-            .tasks-card {
-                padding: 25px;
+            .stat + .stat {
+                border-left: 0;
+                border-top: 1px solid var(--border);
             }
 
-            .tasks-header {
-                align-items: flex-start;
-                flex-direction: column;
+            .stat {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 18px;
             }
 
-            .task-item {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .complete-button {
-                width: 100%;
+            .stat-value {
+                margin: 0;
+                font-size: 22px;
             }
         }
     </style>
-</head>
+@endpush
 
-<body>
-
-<header class="topbar">
-    <div class="logo">
-        Member<span>ship</span>
+@section('content')
+    <div class="page-header">
+        <h1>Welcome back, {{ $member->name }}</h1>
+        <p>Here is an overview of your membership and tasks.</p>
     </div>
 
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-
-        <button type="submit" class="logout-button">
-            Logout
-        </button>
-    </form>
-</header>
-
-<main class="container">
-
-    @if (session('success'))
-        <div class="success-message" id="success-message">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <section class="hero">
-        <div class="hero-content">
-            <h1>
-                Welcome, {{ $member->name }}!
-            </h1>
-
-            <p>
-                Membership Number:
-                <span class="membership-number">
-                    {{ $member->membership_number }}
-                </span>
-            </p>
-
-            <p>
-                Stay on track and complete your assigned tasks.
-            </p>
-        </div>
-    </section>
-
-    <section class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">
-                Total Tasks
-            </div>
-
-            <div class="stat-number">
-                {{ $totalTasks }}
-            </div>
+    <section class="section" style="margin-top: 0;">
+        <div class="section-head">
+            <h2>Membership</h2>
+            <a href="{{ route('member.membership') }}">View details</a>
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">
-                Pending Tasks
-            </div>
-
-            <div class="stat-number">
-                {{ $pendingTasks }}
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-label">
-                Completed Tasks
-            </div>
-
-            <div class="stat-number">
-                {{ $completedTasks }}
-            </div>
-        </div>
-    </section>
-
-    <section class="tasks-card">
-
-        <div class="tasks-header">
-            <h2>
-                My Assigned Tasks
-            </h2>
-
-            <span class="task-count">
-                {{ $totalTasks }}
-                {{ $totalTasks === 1 ? 'Task' : 'Tasks' }}
-            </span>
-        </div>
-
-        <div class="progress-wrapper">
-            <div class="progress-info">
-                <span>Task progress</span>
-                <strong>{{ $progress }}%</strong>
-            </div>
-
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-        </div>
-
-        @forelse ($tasks as $task)
-
-            <div class="task-item">
-
-                <div class="task-details">
-                    <h3 class="task-title">
-                        {{ $task->task_title }}
-                    </h3>
-
-                    <p class="task-description">
-                        {{ $task->description ?: 'No description provided.' }}
-                    </p>
-
-                    @if ($task->completed)
-                        <span class="task-status status-completed">
-                            Completed
-                        </span>
-                    @else
-                        <span class="task-status status-pending">
-                            Pending
-                        </span>
-                    @endif
+        <div class="card">
+            <dl class="details">
+                <div>
+                    <dt>Member Name</dt>
+                    <dd>{{ $member->name }}</dd>
                 </div>
 
-                @if (!$task->completed)
-                    <form
-                        action="{{ route('member.tasks.complete', $task) }}"
-                        method="POST"
-                        onsubmit="
-                            return confirm(
-                                'Mark this task as completed?'
-                            );
-                        "
-                    >
-                        @csrf
-                        @method('PATCH')
+                <div>
+                    <dt>Membership No.</dt>
+                    <dd>{{ $member->membership_number }}</dd>
+                </div>
 
-                        <button
-                            type="submit"
-                            class="complete-button"
-                        >
-                            Mark as Completed
-                        </button>
-                    </form>
-                @endif
+                <div>
+                    <dt>Status</dt>
+                    <dd>@include('member.partials.membership-status', ['status' => $member->status])</dd>
+                </div>
 
-            </div>
+                <div>
+                    <dt>Start Date</dt>
+                    <dd>{{ $currentMembership?->membership_start_date?->format('M d, Y') ?? '—' }}</dd>
+                </div>
 
-        @empty
+                <div>
+                    <dt>End Date</dt>
+                    <dd>{{ $currentMembership?->membership_end_date?->format('M d, Y') ?? '—' }}</dd>
+                </div>
+            </dl>
 
-            <div class="empty-state">
-                No tasks have been assigned to you yet.
-            </div>
-
-        @endforelse
-
+            @if (strtolower($member->status ?? '') === 'pending')
+                <div class="notice">
+                    Your membership application is awaiting admin approval. Start and end dates will appear once it is approved.
+                </div>
+            @endif
+        </div>
     </section>
 
-</main>
+    <section class="section">
+        <div class="section-head">
+            <h2>Task Summary</h2>
+            <a href="{{ route('member.tasks.index') }}">View all tasks</a>
+        </div>
 
-<script>
-    const successMessage =
-        document.getElementById('success-message');
+        <div class="card stats">
+            <div class="stat">
+                <div class="stat-label">
+                    <span class="stat-dot" style="background: var(--amber);"></span>
+                    Pending
+                </div>
+                <div class="stat-value">{{ $taskCounts['pending'] }}</div>
+            </div>
 
-    if (successMessage) {
-        setTimeout(() => {
-            successMessage.classList.add('hide');
+            <div class="stat">
+                <div class="stat-label">
+                    <span class="stat-dot" style="background: var(--violet);"></span>
+                    In Progress
+                </div>
+                <div class="stat-value">{{ $taskCounts['in_progress'] }}</div>
+            </div>
 
-            setTimeout(() => {
-                successMessage.remove();
-            }, 500);
-        }, 3000);
-    }
-</script>
+            <div class="stat">
+                <div class="stat-label">
+                    <span class="stat-dot" style="background: var(--green);"></span>
+                    Completed
+                </div>
+                <div class="stat-value">{{ $taskCounts['completed'] }}</div>
+            </div>
+        </div>
+    </section>
 
-</body>
-</html>
+    <section class="section">
+        <div class="section-head">
+            <h2>Recent Tasks</h2>
+        </div>
+
+        <div class="card">
+            @if ($tasks->isEmpty())
+                <div class="empty">You have no assigned tasks yet.</div>
+            @else
+                <ul class="task-list">
+                    @foreach ($tasks->take(5) as $task)
+                        <li>
+                            <div>
+                                <div class="title">{{ $task->task_title }}</div>
+                                <div class="date">Assigned {{ $task->created_at?->format('M d, Y') }}</div>
+                            </div>
+
+                            @include('member.partials.task-status', ['task' => $task])
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+    </section>
+@endsection

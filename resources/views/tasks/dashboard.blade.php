@@ -381,6 +381,11 @@
             color: var(--green);
         }
 
+        .status.in-progress {
+            background: rgba(181, 140, 255, .14);
+            color: #b58cff;
+        }
+
         .empty-task {
             padding: 35px;
             border: 1px dashed rgba(255, 255, 255, .18);
@@ -598,6 +603,10 @@
                                         @if ($task->completed)
                                             <span class="status completed">
                                                 Completed
+                                            </span>
+                                        @elseif ($task->isInProgress())
+                                            <span class="status in-progress">
+                                                In Progress
                                             </span>
                                         @else
                                             <span class="status pending">

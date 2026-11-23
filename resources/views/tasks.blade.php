@@ -374,6 +374,260 @@
                 width: 100%;
             }
         }
+
+        /* ADMIN DASHBOARD THEME */
+
+body {
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(232, 117, 184, 0.12),
+            transparent 34%
+        ),
+        #242027;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    max-width: 1120px;
+    padding: 38px 28px 65px;
+}
+
+.back-button-wrapper {
+    position: static;
+    margin-bottom: 25px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 11px 18px;
+    border: 1px solid rgba(232, 117, 184, 0.5);
+    border-radius: 8px;
+    background: #302834;
+    color: #f08bc2;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    backdrop-filter: none;
+}
+
+.back-button:hover {
+    background: #e875b8;
+    color: #241d27;
+}
+
+header {
+    margin-bottom: 32px;
+    padding: 12px 0 8px;
+    text-align: left;
+}
+
+.chapter {
+    display: block;
+    margin-bottom: 8px;
+    color: #e875b8;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+h1 {
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: -1px;
+    text-shadow: none;
+}
+
+header p {
+    margin-top: 10px;
+    color: #c8becb;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    text-shadow: none;
+}
+
+.quote-translation {
+    display: none;
+}
+
+.form-card {
+    max-width: none;
+    margin: 0 0 38px;
+    padding: 27px;
+    background: #17141b;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 3px solid #e875b8;
+    border-radius: 15px;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+    backdrop-filter: none;
+}
+
+label {
+    color: #e9e1eb;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+input[type="text"],
+textarea,
+select {
+    margin-bottom: 18px;
+    padding: 13px 15px;
+    border: 1px solid #4a414d;
+    border-radius: 8px;
+    background: #25202a;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #958b9a;
+}
+
+select option {
+    background: #25202a;
+    color: #ffffff;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #e875b8;
+    box-shadow: 0 0 0 3px rgba(232, 117, 184, 0.12);
+}
+
+button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #e875b8;
+    color: #241d27;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+button:hover {
+    background: #f394c9;
+    transform: translateY(-1px);
+}
+
+.success {
+    max-width: none;
+    margin: 0 0 22px;
+    padding: 12px 16px;
+    border: 1px solid rgba(99, 217, 155, 0.35);
+    border-radius: 8px;
+    background: rgba(45, 117, 82, 0.22);
+    color: #72dfa5;
+}
+
+.error {
+    color: #f28ba9;
+}
+
+h2 {
+    max-width: none;
+    margin: 0 0 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+article {
+    max-width: none;
+    margin: 0 0 15px;
+    padding: 23px 25px;
+    background: #17141b;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    backdrop-filter: none;
+}
+
+article:hover {
+    background: #211c25;
+    border-color: rgba(232, 117, 184, 0.45);
+}
+
+article h3 {
+    color: #f08bc2;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+article p {
+    color: #c9bfcc;
+    font-size: 13px;
+}
+
+.assigned-member {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.task-status {
+    margin-top: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(99, 217, 155, 0.14);
+    color: #72dfa5;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.delete-button {
+    padding: 10px 15px;
+    border-radius: 7px;
+    background: rgba(240, 141, 168, 0.15);
+    color: #f28ba9;
+    font-size: 12px;
+}
+
+.delete-button:hover {
+    background: #f28ba9;
+    color: #241d27;
+}
+
+hr {
+    max-width: none;
+    margin: 15px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.empty-state {
+    max-width: none;
+    padding: 35px 20px;
+    border: 1px dashed rgba(232, 117, 184, 0.4);
+    border-radius: 12px;
+    background: #17141b;
+    color: #c8becb;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+.closing-note {
+    margin-top: 35px;
+    color: #e875b8;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
     </style>
 </head>
 
@@ -525,11 +779,7 @@
 
             <span class="task-status">
                 Status:
-                {{
-                    $task->completed
-                    ? 'Completed'
-                    : 'Not completed'
-                }}
+                {{ $task->statusLabel() }}
             </span>
 
             <form

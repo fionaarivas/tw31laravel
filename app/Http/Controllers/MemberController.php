@@ -9,6 +9,7 @@ use App\Models\MembershipLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class MemberController extends Controller
 {
@@ -22,9 +23,9 @@ class MemberController extends Controller
         ]);
 
         if ($search) {
-            $query->where(function ($query) use ($search) {
-                $term = "%{$search}%";
+            $term = "%{$search}%";
 
+            $query->where(function ($query) use ($term) {
                 $query->where('name', 'like', $term)
                     ->orWhere('membership_number', 'like', $term)
                     ->orWhere('email', 'like', $term)
@@ -63,10 +64,8 @@ class MemberController extends Controller
             'membership_level_id' => 'required|exists:membership_levels,id',
         ]);
 
-        $nextNumber = (Member::max('id') ?? 0) + 1;
-
-        $membershipNumber =
-            'MEM-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        $membershipNumber = 'MEM-' .
+            str_pad((Member::max('id') ?? 0) + 1, 4, '0', STR_PAD_LEFT);
 
         $user = User::create([
             'name' => $validated['name'],
@@ -156,34 +155,30 @@ class MemberController extends Controller
             ->with('success', 'Member updated successfully.');
     }
 
-   public function destroy(Member $member)
-{
-    DB::transaction(function () use ($member) {
-        
-        $member->tasks()->delete();
+    public function destroy(Member $member)
+    {
+        DB::transaction(function () use ($member) {
+            $member->tasks()->delete();
 
-        
-        $member->membershipTransactions()
-            ->with('payments')
-            ->get()
-            ->each(function ($transaction) {
-                $transaction->payments()->delete();
-                $transaction->delete();
-            });
+            $member->membershipTransactions()
+                ->with('payments')
+                ->get()
+                ->each(function ($transaction) {
+                    $transaction->payments()->delete();
+                    $transaction->delete();
+                });
 
-        
-        if ($member->user) {
-            $member->user->delete();
-        }
+            if ($member->user) {
+                $member->user->delete();
+            }
 
-       
-        $member->delete();
-    });
+            $member->delete();
+        });
 
-    return redirect()
-        ->route('members.index')
-        ->with('success', 'Member deleted successfully.');
-}
+        return redirect()
+            ->route('members.index')
+            ->with('success', 'Member deleted successfully.');
+    }
 
     public function deactivate(Member $member)
     {
@@ -207,6 +202,7 @@ class MemberController extends Controller
             ->with('success', 'Member activated successfully.');
     }
 
+    // Admin transaction history
     public function transactionHistory(Member $member)
     {
         $member->load([
@@ -219,6 +215,38 @@ class MemberController extends Controller
         return view(
             'members.transactions',
             compact('member')
+        );
+    }
+
+    /**
+     * Read-only "My Membership" page for the authenticated member,
+     * including their own transaction and payment history.
+     */
+    public function memberTransactionHistory(): View
+    {
+        abort_unless(
+            auth()->user()->role === 'member',
+            403
+        );
+
+        $member = auth()->user()->member;
+
+        abort_unless($member, 403);
+
+        $transactions = $member->membershipTransactions()
+            ->with('payments')
+            ->latest('transaction_date')
+            ->latest('id')
+            ->get();
+
+        $currentMembership = $transactions
+            ->where('status', 'approved')
+            ->sortByDesc('membership_end_date')
+            ->first();
+
+        return view(
+            'member.membership',
+            compact('member', 'transactions', 'currentMembership')
         );
     }
 }

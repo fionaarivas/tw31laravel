@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Models\Task;
+use App\Models\User;
 use App\Notifications\TaskAssignedNotification;
+use App\Notifications\TaskStartedNotification;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class TaskController extends Controller
 {
@@ -16,20 +22,11 @@ class TaskController extends Controller
             ->latest()
             ->get();
 
-        $members = Member::where(
-            'status',
-            'active'
-        )
+        $members = Member::where('status', 'active')
             ->orderBy('name')
             ->get();
 
-        return view(
-            'tasks',
-            compact(
-                'tasks',
-                'members'
-            )
-        );
+        return view('tasks', compact('tasks', 'members'));
     }
 
     public function store(Request $request)
@@ -58,6 +55,7 @@ class TaskController extends Controller
             'member_id' => $member->id,
             'task_title' => $validated['task_title'],
             'description' => $validated['description'] ?? null,
+            'status' => 'pending',
             'completed' => false,
         ]);
 
@@ -86,13 +84,18 @@ class TaskController extends Controller
         $totalTasks = Task::count();
 
         $pendingTasks = Task::where(
-            'completed',
-            false
+            'status',
+            'pending'
+        )->count();
+
+        $inProgressTasks = Task::where(
+            'status',
+            'in_progress'
         )->count();
 
         $completedTasks = Task::where(
-            'completed',
-            true
+            'status',
+            'completed'
         )->count();
 
         $tasks = Task::with('member')
@@ -104,6 +107,7 @@ class TaskController extends Controller
             compact(
                 'totalTasks',
                 'pendingTasks',
+                'inProgressTasks',
                 'completedTasks',
                 'tasks'
             )
@@ -121,20 +125,38 @@ class TaskController extends Controller
 
         abort_unless($member, 403);
 
+        $member->load('membershipTransactions');
+
         $tasks = $member->tasks()
             ->latest()
             ->get();
+
+        $taskCounts = [
+            'pending' => $tasks->where('status', Task::STATUS_PENDING)->count(),
+            'in_progress' => $tasks->where('status', Task::STATUS_IN_PROGRESS)->count(),
+            'completed' => $tasks->where('status', Task::STATUS_COMPLETED)->count(),
+        ];
+
+        $currentMembership = $member->membershipTransactions
+            ->where('status', 'approved')
+            ->sortByDesc('membership_end_date')
+            ->first();
 
         return view(
             'member.dashboard',
             compact(
                 'member',
-                'tasks'
+                'tasks',
+                'taskCounts',
+                'currentMembership'
             )
         );
     }
 
-    public function complete(Task $task)
+    /**
+     * List the tasks assigned to the authenticated member.
+     */
+    public function memberTasks(): View
     {
         abort_unless(
             auth()->user()->role === 'member',
@@ -145,17 +167,69 @@ class TaskController extends Controller
 
         abort_unless($member, 403);
 
-        abort_unless(
-            $task->member_id === $member->id,
-            403
+        $tasks = $member->tasks()
+            ->latest()
+            ->get();
+
+        return view(
+            'member.tasks',
+            compact('member', 'tasks')
         );
+    }
+
+    /**
+     * Move a pending task assigned to the member to "in progress" and notify admins.
+     */
+    public function start(Task $task): RedirectResponse
+    {
+        Gate::authorize('updateStatus', $task);
+
+        if (! $task->isPending()) {
+            throw ValidationException::withMessages([
+                'status' => 'Only pending tasks can be started.',
+            ]);
+        }
 
         $task->update([
-            'completed' => true,
+            'status' => Task::STATUS_IN_PROGRESS,
+        ]);
+
+        $admins = User::where('role', 'admin')->get();
+
+        if ($admins->isNotEmpty()) {
+            Notification::send(
+                $admins,
+                new TaskStartedNotification($task->load('member'))
+            );
+        }
+
+        return redirect()
+            ->route('member.tasks.index')
+            ->with(
+                'success',
+                'Task started. It is now marked as in progress.'
+            );
+    }
+
+    /**
+     * Mark an in-progress task assigned to the member as completed.
+     */
+    public function complete(Task $task): RedirectResponse
+    {
+        Gate::authorize('updateStatus', $task);
+
+        if (! $task->isInProgress()) {
+            throw ValidationException::withMessages([
+                'status' => 'Only tasks in progress can be marked as completed.',
+            ]);
+        }
+
+        $task->update([
+            'status' => Task::STATUS_COMPLETED,
         ]);
 
         return redirect()
-            ->route('member.dashboard')
+            ->route('member.tasks.index')
             ->with(
                 'success',
                 'Task marked as completed.'
