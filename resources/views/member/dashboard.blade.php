@@ -4,6 +4,26 @@
 
 @push('styles')
     <style>
+
+        :root {
+    --bg: #242027;
+    --surface: #20181c;
+    --surface-light: #21191e;
+    --border: #746570;
+    --text: #FFFFFF;
+    --muted: #e6a7cf;
+
+    --pink: #E86DB5;
+    --pink-dark: #4B2945;
+
+    --green: #63D99B;
+    --green-bg: rgba(99, 217, 155, 0.12);
+
+    --amber: #F2B84B;
+    --amber-bg: rgba(242, 184, 75, 0.12);
+
+    --violet: #A77BFF;
+}
         .verification-card {
             display: flex;
             align-items: center;

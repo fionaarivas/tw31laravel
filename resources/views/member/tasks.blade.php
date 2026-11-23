@@ -4,6 +4,26 @@
 
 @push('styles')
     <style>
+
+        :root {
+    --bg: #242027;
+    --surface: #1B1820;
+    --surface-light: #29232D;
+    --border: #85768b;
+    --text: #FFFFFF;
+    --muted: #C2B9C8;
+
+    --pink: #E86DB5;
+    --pink-dark: #4B2945;
+
+    --green: #63D99B;
+    --green-bg: rgba(99, 217, 155, 0.12);
+
+    --amber: #F2B84B;
+    --amber-bg: rgba(242, 184, 75, 0.12);
+
+    --violet: #A77BFF;
+}
         .task-grid {
             display: grid;
             gap: 14px;

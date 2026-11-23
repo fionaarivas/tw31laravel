@@ -26,7 +26,7 @@
             color: #ffffff;
             background:
                 linear-gradient(
-                    rgba(12, 24, 23, 0.35),
+                    rgba(199, 155, 166, 0.79),
                     rgba(10, 22, 18, 0.72)
                 ),
                 url('https://i.pinimg.com/1200x/12/74/79/1274791065449a134942fce93aa6986a.jpg')
