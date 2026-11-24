@@ -733,17 +733,27 @@
         document.getElementById('weather-feels-like').textContent =
             data.feels_like ?? '--';
 
+        const weatherIcon = document.getElementById('weather-icon');
+
         if (data.icon) {
-            document.getElementById('weather-icon').src =
+            weatherIcon.onerror = () => {
+                weatherIcon.hidden = true;
+            };
+
+            weatherIcon.src =
                 `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
+
+            weatherIcon.hidden = false;
+        } else {
+            weatherIcon.hidden = true;
         }
 
         loading.hidden = true;
         weatherContent.hidden = false;
     })
-    .catch(error => {
+    .catch(() => {
         loading.hidden = true;
-        errorBox.textContent = error.message;
+        errorBox.textContent = 'Weather data is currently unavailable.';
         errorBox.hidden = false;
     });
 </script>

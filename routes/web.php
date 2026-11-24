@@ -217,12 +217,18 @@ Route::middleware('auth')->group(function () {
             '/member/tasks/{task}/complete',
             [TaskController::class, 'complete']
         )->name('member.tasks.complete');
-
-        Route::get(
-            '/weather',
-            [WeatherController::class, 'show']
-        )->name('weather.show');
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weather Route
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/weather',
+        [WeatherController::class, 'show']
+    )->name('weather.show');
 });
 
 require __DIR__ . '/auth.php';
